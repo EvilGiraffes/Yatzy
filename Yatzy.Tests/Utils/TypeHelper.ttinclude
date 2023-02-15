@@ -1,0 +1,12 @@
+﻿<#@ assembly name="System.Core" #>
+<#@ import namespace="System"#>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+
+<#+
+public const string TypeFormat = "T{0}";
+public static string GetTypeList(int count, string format)
+{
+	return string.Join(", ", Enumerable.Range(1, count).Select(number => string.Format(format, number)).ToArray);
+}
+#>
