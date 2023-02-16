@@ -4,6 +4,7 @@ using Serilog;
 
 using Yatzy.DiceStates;
 using Yatzy.Errors;
+using Yatzy.Utils;
 
 namespace Yatzy.Dices;
 public sealed class SixFacedDice : IDice
@@ -40,7 +41,7 @@ public sealed class SixFacedDice : IDice
     /// <param name="startFace">The face the dice should start in, default is 1</param>
     public SixFacedDice(ILogger logger, IDiceState startState, int startFace = 1)
     {
-        this.logger = logger;
+        this.logger = logger.ForType<SixFacedDice>();
         State = startState;
         Face = startFace;
     }

@@ -1,0 +1,43 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".Generated.cs" #>
+<#
+Dictionary<string, int> rules = new()
+	{
+		{ "Aces", 1 },
+		{ "Twos", 2 },
+		{ "Threes", 3 },
+		{ "Fours", 4 },
+		{ "Fives", 5 },
+		{ "Sixes", 6 }
+	};
+#>
+// This is a generated file!
+// Do not manually modify as your changes will be overwritten.
+
+using Serilog;
+
+namespace Yatzy.Rules;
+/// <summary>
+/// A factory to create predetermined <see cref="SameValueRule"/>.
+/// </summary>
+public static class SameValueRuleFactory
+{
+	<# foreach (KeyValuePair<string, int> pair in rules)
+	{
+	#>
+
+	// Generated Method.
+
+	/// <summary>
+	/// Represents a <see cref="SameValueRule"/> of <#= pair.Key #> with the value of <#= pair.Value #>.
+	/// </summary>
+	/// <param name="logger">The logger used throughout this application.</param>
+	/// <returns>A new <see cref="SameValueRule"/> which contains the predetermined values.</returns>
+	public static SameValueRule <#= pair.Key #>(ILogger logger)
+		=> new(logger, nameof(<#= pair.Key #>), <#= pair.Value #>, <#= pair.Value #>);
+	<#
+	};
+	#>
+}

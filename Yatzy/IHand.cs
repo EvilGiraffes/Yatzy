@@ -1,17 +1,13 @@
 ﻿using Yatzy.Dices;
-using Yatzy.Errors;
 
 namespace Yatzy;
 /// <summary>
 /// Defines the current hand.
 /// </summary>
-public interface IHand<TDice>
+/// <typeparam name="TDice">The dice in which this hand can hold.</typeparam>
+public interface IHand<TDice> : IReadOnlyList<TDice>
     where TDice : IDice
 {
-    /// <summary>
-    /// The current hand defined by <typeparamref name="TDice"/>.
-    /// </summary>
-    IList<TDice> CurrentHand { get; }
     /// <summary>
     /// Keeps the current value in the hand.
     /// </summary>
