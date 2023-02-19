@@ -6,11 +6,15 @@ namespace Yatzy.Scoreboards.Renderers;
 /// <summary>
 /// Represents a renderer who will render it as a simple line with the provided seperators.
 /// </summary>
-/// <typeparam name="TKey"><inheritdoc cref="IRenderer{Tkey}" path="/typeparam"/></typeparam>
-public sealed class StringSeperated<TKey> : IRenderer<TKey>
-    where TKey : INameable
+public sealed class StringSeperated : IRenderer
 {
+    /// <summary>
+    /// The default seperator for each pair.
+    /// </summary>
     public readonly static string DefaultSeperator = Environment.NewLine;
+    /// <summary>
+    /// The default seperator for the key and value in the scoreboard.
+    /// </summary>
     public const string DefaultKeyValueSeperator = ", ";
     readonly string keyValueSeperator;
     readonly string seperator;
@@ -37,7 +41,7 @@ public sealed class StringSeperated<TKey> : IRenderer<TKey>
     /// </param>
     public StringSeperated(ILogger logger, string? seperator = null, string? keyValueSeperator = null)
     {
-        this.logger = logger.ForType<StringSeperated<TKey>>();
+        this.logger = logger.ForType<StringSeperated>();
         seperator ??= DefaultSeperator;
         this.seperator = seperator;
         keyValueSeperator ??= DefaultKeyValueSeperator;
@@ -45,6 +49,6 @@ public sealed class StringSeperated<TKey> : IRenderer<TKey>
     }
     // TODO: Implement.
     /// <inheritdoc/>
-    public string Render(IDictionary<TKey, int> scoreboard)
+    public string Render(IDictionary<INameable, int> scoreboard)
         => throw new NotImplementedException();
 }

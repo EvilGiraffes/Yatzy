@@ -57,8 +57,8 @@ public class SameValueRulesTests
             .Setup(dice => dice.Face)
             .Returns(face + 1);
         Points actual = rule.CalculatePoints(hand);
-        output.WriteResult(Points.NotRecieved, actual);
-        actual.Should().Be(Points.NotRecieved);
+        output.WriteResult(Points.Empty, actual);
+        actual.Should().Be(Points.Empty);
     }
     SameValueRule BuildRule(int face, int pointsPerValue)
         => new(loggerMock.Object, Identifier, face, pointsPerValue);

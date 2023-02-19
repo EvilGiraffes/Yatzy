@@ -15,43 +15,42 @@ public sealed class YatzyScoreboard : IScoreboard<YatzyEventArgs>
         {
             if (args is null)
             {
-                logger.Information("There is no arguments.");
+                logger.Debug("There is no arguments.");
                 return;
             }
-            Action<string> logInfo = action =>
-                logger.Information("{Action} {Name}, defined as {@Player}", action, args.Player.Name, args.Player);
+            Action<string> logDebug = action =>
+                logger.Debug("{Action} {Name}, defined as {@Player}", action, args.Player.Name, args.Player);
             if (!scores.ContainsKey(args.Player))
             {
-                logInfo("Creating");
+                logDebug("Creating");
                 scores[args.Player] = args.PointsRecieved;
                 return;
             }
-            logInfo("Updating");
+            logDebug("Updating");
             scores[args.Player] += args.PointsRecieved;
         };
-    readonly IDictionary<Player, int> scores;
-    readonly IRenderer<Player> renderer;
+    readonly IDictionary<INameable, int> scores;
+    readonly IRenderer renderer;
     readonly ILogger logger;
     /// <summary>
-    /// Creates a new instance of a yatzy scoreboard.
+    /// Creates a new instance of <see cref="YatzyScoreboard"/>.
     /// </summary>
-    /// <param name="logger">The logger used throughout the application.</param>
-    public YatzyScoreboard(ILogger logger) : this(logger, null, null)
+    /// <param name="logger">The logger used throughout this application.</param>
+    /// <param name="renderer">The renderer to format the scores with.</param>
+    public YatzyScoreboard(ILogger logger, IRenderer renderer)
+        : this(logger, renderer, new Dictionary<INameable, int>())
     {
     }
-    /// <inheritdoc cref="YatzyScoreboard(ILogger)"/>
-    /// <param name="renderer">The renderer to use for rendering the scores.</param>
-    public YatzyScoreboard(ILogger logger, IRenderer<Player> renderer) : this(logger, renderer, null)
-    {
-    }
-    /// <inheritdoc cref="YatzyScoreboard(ILogger, IRenderer{Player})"/>
-    /// <param name="scores">The startup scores to use.</param>
-    public YatzyScoreboard(ILogger logger, IRenderer<Player>? renderer, IDictionary<Player, int>? scores)
+    /// <summary>
+    /// <inheritdoc cref="YatzyScoreboard(ILogger, IRenderer)" path="/summary"/>
+    /// </summary>
+    /// <param name="logger"><inheritdoc cref="YatzyScoreboard(ILogger, IRenderer)" path="/param[@name='logger']"/></param>
+    /// <param name="renderer"><inheritdoc cref="YatzyScoreboard(ILogger, IRenderer)" path="/param[@name='renderer']"/></param>
+    /// <param name="scores">The scoreboard being wrapped.</param>
+    public YatzyScoreboard(ILogger logger, IRenderer renderer, IDictionary<INameable, int> scores)
     {
         this.logger = logger.ForType<YatzyScoreboard>();
-        renderer ??= new StringSeperated<Player>(logger);
         this.renderer = renderer;
-        scores ??= new Dictionary<Player, int>();
         this.scores = scores;
     }
     /// <inheritdoc/>

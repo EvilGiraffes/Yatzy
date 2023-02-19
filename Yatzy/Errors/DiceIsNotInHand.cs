@@ -20,20 +20,31 @@ public class DiceIsNotInHand<TDice> : Exception
     /// The hand the value was not found in.
     /// </summary>
     public IList<TDice> Hand { get; init; } = Array.Empty<TDice>();
+    /// <inheritdoc/>
     public override string Message
         => BuildMessage();
+    /// <inheritdoc cref="Exception()"/>
     public DiceIsNotInHand()
     {
     }
-
+    /// <inheritdoc cref="Exception(string?)"/>
     public DiceIsNotInHand(string? message) : base(message)
     {
     }
-
-    public DiceIsNotInHand(string? message, Exception? inner) : base(message, inner)
+    /// <inheritdoc cref="Exception(string?, Exception?)"/>
+    public DiceIsNotInHand(string? message, Exception? innerException) : base(message, innerException)
     {
     }
     // TODO: Document if it is used.
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="hand"></param>
+    /// <param name="dice"></param>
+    /// <param name="message"></param>
+    /// <param name="inner"></param>
+    /// <exception cref="DiceIsNotInHand{TDice}"></exception>
     public static void Guard(ILogger logger, IList<TDice> hand, TDice dice, string? message = null, Exception? inner = null)
     {
         if (hand.Contains(dice))

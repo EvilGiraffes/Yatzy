@@ -10,6 +10,10 @@ namespace Yatzy.DiceStates;
 public sealed class HeldState : IDiceState
 {
     readonly ILogger logger;
+    /// <summary>
+    /// Constructs a new instance of the <see cref="HeldState"/>.
+    /// </summary>
+    /// <param name="logger">The logger used throughout this application.</param>
     public HeldState(ILogger logger)
     {
         this.logger = logger.ForType<HeldState>();
@@ -18,7 +22,8 @@ public sealed class HeldState : IDiceState
     /// <summary>
     /// Will not roll the dice, rather keep it as it is.
     /// </summary>
-    /// <param name="context"><inheritdoc cref="IDiceState.Roll(DynamicDice)" path="/param[@name='context']"/></param>
+    /// <param name="context"><inheritdoc cref="IDiceState.Roll(IDice, DiceRange)" path="/param[@name='context']"/></param>
+    /// <param name="_">Dice range isnt used in this instance.</param>
     /// <returns>As it is held it will return the face back.</returns>
     public int Roll(IDice context, DiceRange _)
     {

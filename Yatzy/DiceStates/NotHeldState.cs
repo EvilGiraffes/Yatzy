@@ -25,7 +25,8 @@ public sealed class NotHeldState : IDiceState
     /// <summary>
     /// Will roll a dice as defined by the <see cref="IRandomizerProvider"/> provider.
     /// </summary>
-    /// <param name="context"></param>
+    /// <param name="context"><inheritdoc cref="IDiceState.Roll(IDice, DiceRange)" path="/param[@name='context']"/></param>
+    /// <param name="range"><inheritdoc cref="IDiceState.Roll(IDice, DiceRange)" path="/param[@name='range']"/></param>
     /// <returns>A new <see cref="int"/> based on the randomization.</returns>
     public int Roll(IDice context, DiceRange range)
     {

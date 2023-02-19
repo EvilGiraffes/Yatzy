@@ -7,7 +7,7 @@ public sealed class YatzyEventArgs : EventArgs
     /// <summary>
     /// Player that got the points.
     /// </summary>
-    public Player Player { get; init; } = default!;
+    public INameable Player { get; init; } = default!;
     /// <summary>
     /// The amount of points the player recieved.
     /// </summary>

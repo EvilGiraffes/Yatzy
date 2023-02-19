@@ -25,6 +25,10 @@ public class PointsTests
     public void Cast_InvalidPoints_ThrowsException()
     {
         Action act = () => _ = (Points) (Points.MinimumPoints - 1);
-        act.Should().Throw<InvalidCastException>();
+        act.Should()
+            .Throw<InvalidCastException>()
+            .And
+            .InnerException.Should()
+            .BeOfType<PointsOutOfRange>();
     }
 }

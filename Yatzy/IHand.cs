@@ -1,4 +1,5 @@
 ﻿using Yatzy.Dices;
+using Yatzy.Errors;
 
 namespace Yatzy;
 /// <summary>
@@ -12,7 +13,10 @@ public interface IHand<TDice> : IReadOnlyList<TDice>
     /// Keeps the current value in the hand.
     /// </summary>
     /// <param name="dice">The dice to keep.</param>
-    /// <exception cref="DiceIsNotInHand">Thrown when the dice cannot be found in the current hand.</exception>
+    /// <exception cref="DiceIsNotInHand{TDice}">Thrown when the dice cannot be found in the current hand.</exception>
     void Keep(TDice dice);
+    /// <summary>
+    /// Rolls all the dice in the hand.
+    /// </summary>
     void Roll();
 }

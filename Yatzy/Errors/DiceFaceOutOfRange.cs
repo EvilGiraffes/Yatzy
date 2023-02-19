@@ -6,17 +6,26 @@ namespace Yatzy.Errors;
 /// </summary>
 public class DiceFaceOutOfRange : Exception
 {
+    /// <summary>
+    /// The range that is supported.
+    /// </summary>
+    public DiceRange SupportedRange { get; init; }
+    /// <summary>
+    /// The value that was passed in.
+    /// </summary>
+    public int Value { get; init; }
     static string GuardTemplate
         => "The value {Value} is out of range defined as {Min}-{Max}. Exception thrown with message {Message}";
+    /// <inheritdoc cref="Exception()"/>
     public DiceFaceOutOfRange()
     {
     }
-
+    /// <inheritdoc cref="Exception(string?)"/>
     public DiceFaceOutOfRange(string? message) : base(message)
     {
     }
-
-    public DiceFaceOutOfRange(string? message, Exception? inner) : base(message, inner)
+    /// <inheritdoc cref="Exception(string?, Exception?)"/>
+    public DiceFaceOutOfRange(string? message, Exception? innerException) : base(message, innerException)
     {
     }
     /// <summary>
@@ -33,12 +42,20 @@ public class DiceFaceOutOfRange : Exception
         if (value < range.MinimumFace)
         {
             logger.Error(GuardTemplate, value, range.MinimumFace, range.MaximumFace, tooSmallMessage);
-            throw new DiceFaceOutOfRange(tooSmallMessage);
+            throw new DiceFaceOutOfRange(tooSmallMessage)
+            {
+                SupportedRange = range,
+                Value = value
+            };
         }
         if (value > range.MaximumFace)
         {
             logger.Error(GuardTemplate, value, range.MinimumFace, range.MaximumFace, tooLargeMessage);
-            throw new DiceFaceOutOfRange(tooLargeMessage);
+            throw new DiceFaceOutOfRange(tooLargeMessage)
+            {
+                SupportedRange = range,
+                Value = value
+            };
         }
     }
     /// <summary>
@@ -48,7 +65,7 @@ public class DiceFaceOutOfRange : Exception
     /// <param name="value"><inheritdoc cref="Guard(ILogger, int, DiceRange, string?, string?)" path="/param[@name='value']"/></param>
     /// <param name="range"><inheritdoc cref="Guard(ILogger, int, DiceRange, string?, string?)" path="/param[@name='range']"/></param>
     /// <param name="message">A message when it is out of range.</param>
-    /// <exception cref="DiceFaceOutOfRange"><inheritdoc cref="Guard(int, int, int, string?, string?)" path="/exception"/></exception>
+    /// <exception cref="DiceFaceOutOfRange"><inheritdoc cref="Guard(ILogger, int, DiceRange, string?, string?)" path="/exception"/></exception>
     public static void Guard(ILogger logger, int value, DiceRange range, string? message = null)
         => Guard(logger, value, range, message, message);
 }

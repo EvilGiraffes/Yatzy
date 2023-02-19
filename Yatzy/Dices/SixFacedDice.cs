@@ -7,6 +7,9 @@ using Yatzy.Errors;
 using Yatzy.Utils;
 
 namespace Yatzy.Dices;
+/// <summary>
+/// Represents a dice that has six faces.
+/// </summary>
 public sealed class SixFacedDice : IDice
 {
     /// <inheritdoc/>
