@@ -18,9 +18,12 @@ Dictionary<string, int> rules = new()
 
 using Serilog;
 
+using Yatzy.Dices;
+using Yatzy.PointsCalculators;
+
 namespace Yatzy.Rules;
 /// <summary>
-/// A factory to create predetermined <see cref="SameValueRule"/>.
+/// A factory to create predetermined <see cref="SameValueRule{TDice}"/>.
 /// </summary>
 public static class SameValueRuleFactory
 {
@@ -31,12 +34,14 @@ public static class SameValueRuleFactory
 	// Generated Method.
 
 	/// <summary>
-	/// Represents a <see cref="SameValueRule"/> of <#= pair.Key #> with the value of <#= pair.Value #>.
+	/// Represents a <see cref="SameValueRule{TDice}"/> of <#= pair.Key #> with the value of <#= pair.Value #>.
 	/// </summary>
-	/// <param name="logger">The logger used throughout this application.</param>
-	/// <returns>A new <see cref="SameValueRule"/> which contains the predetermined values.</returns>
-	public static SameValueRule <#= pair.Key #>(ILogger logger)
-		=> new(logger, nameof(<#= pair.Key #>), <#= pair.Value #>, <#= pair.Value #>);
+	/// <param name="logger"><inheritdoc cref="SameValueRule{TDice}.SameValueRule(ILogger, string, int, IPointsCalculator)" path="/param[@name='logger']"/></param>
+	/// <param name="pointsCalculator"><inheritdoc cref="SameValueRule{TDice}.SameValueRule(ILogger, string, int, IPointsCalculator)" path="/param[@name='pointsCalculator']"/></param>
+	/// <returns>A new <see cref="SameValueRule{TDice}"/> which contains the predetermined values.</returns>
+	public static SameValueRule<TDice> <#= pair.Key #><TDice>(ILogger logger, IPointsCalculator pointsCalculator)
+		where TDice : IDice
+		=> new(logger, nameof(<#= pair.Key #>), <#= pair.Value #>, pointsCalculator);
 	<#
 	};
 	#>

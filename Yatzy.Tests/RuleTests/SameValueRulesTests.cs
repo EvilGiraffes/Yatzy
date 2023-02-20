@@ -1,4 +1,5 @@
 ﻿using Yatzy.Dices;
+using Yatzy.PointsCalculators;
 using Yatzy.Rules;
 
 namespace Yatzy.Tests.RuleTests;
@@ -7,12 +8,14 @@ public class SameValueRulesTests
     readonly ITestOutputHelper output;
     readonly Mock<ILogger> loggerMock;
     readonly Mock<IDice> diceMock;
+    readonly Mock<IPointsCalculator> pointsCalculatorMock;
     const string Identifier = nameof(SameValueRulesTests);
     public SameValueRulesTests(ITestOutputHelper output)
     {
         this.output = output;
         loggerMock = MockHelper.GetLogger();
         diceMock = new();
+        pointsCalculatorMock = new();
     }
     [Fact]
     public void Points_OneItemInHand_CalculatesOnePoint()
@@ -21,8 +24,8 @@ public class SameValueRulesTests
         int face = 1;
         int diceValue = face;
         Points expected = pointsPerValue;
-        IReadOnlyList<IDice> hand = BuildHand(5);
-        SameValueRule rule = BuildRule(face, pointsPerValue);
+        IReadOnlyList<IDice> hand = diceMock.BuildHand(5);
+        SameValueRule<IDice> rule = BuildRule(face, pointsPerValue);
         diceMock
             .Setup(dice => dice.Face)
             .Returns(() => diceValue++);
@@ -37,8 +40,8 @@ public class SameValueRulesTests
         int face = 1;
         int amount = 5;
         Points expected = pointsPerValue * amount;
-        IReadOnlyList<IDice> hand = BuildHand(amount);
-        SameValueRule rule = BuildRule(face, pointsPerValue);
+        IReadOnlyList<IDice> hand = diceMock.BuildHand(amount);
+        SameValueRule<IDice> rule = BuildRule(face, pointsPerValue);
         diceMock
             .Setup(dice => dice.Face)
             .Returns(face);
@@ -51,8 +54,8 @@ public class SameValueRulesTests
     {
         int pointsPerValue = 10;
         int face = 1;
-        IReadOnlyList<IDice> hand = BuildHand(5);
-        SameValueRule rule = BuildRule(face, pointsPerValue);
+        IReadOnlyList<IDice> hand = diceMock.BuildHand(5);
+        SameValueRule<IDice> rule = BuildRule(face, pointsPerValue);
         diceMock
             .Setup(dice => dice.Face)
             .Returns(face + 1);
@@ -60,13 +63,9 @@ public class SameValueRulesTests
         output.WriteResult(Points.Empty, actual);
         actual.Should().Be(Points.Empty);
     }
-    SameValueRule BuildRule(int face, int pointsPerValue)
-        => new(loggerMock.Object, Identifier, face, pointsPerValue);
-    IReadOnlyList<IDice> BuildHand(int count)
+    SameValueRule<IDice> BuildRule(int face, int pointsPerValue)
     {
-        List<IDice> dices = new();
-        for (int i = 0; i < count; i++)
-            dices.Add(diceMock.Object);
-        return dices;
+        pointsCalculatorMock.Setup(calculator => calculator.Calculate(It.IsAny<int>())).Returns(pointsPerValue);
+        return new(loggerMock.Object, Identifier, face, pointsCalculatorMock.Object);
     }
 }

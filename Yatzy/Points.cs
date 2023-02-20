@@ -18,8 +18,9 @@ public readonly record struct Points
     /// <summary>
     /// An instance of points where it has not been recieved. Used when you wont give points.
     /// </summary>
+    /// <value>This has an equivilant value of constructing a <see cref="Points"/> structure with <see cref="MinimumPoints"/> passed in the constructor.</value>
     public static Points Empty
-        => new(0);
+        => new(MinimumPoints);
     /// <summary>
     /// The absolute maximum amount of points allowed to give.
     /// </summary>
@@ -44,7 +45,12 @@ public readonly record struct Points
             };
         Amount = points;
     }
-    /// <inheritdoc cref="Points(int)"/>
+    /// <summary>
+    /// Will cast from an <see cref="int"/> to a new <see cref="Points"/>.
+    /// </summary>
+    /// <param name="points">The value to cast from.</param>
+    /// <exception cref="PointsOutOfRange"><inheritdoc cref="Points(int)" path="/exception"/></exception>
+    /// <exception cref="PointsCastException">Thrown if the casting fails.</exception>
     public static implicit operator Points(int points)
     {
         try
@@ -53,16 +59,12 @@ public readonly record struct Points
         }
         catch (PointsOutOfRange outOfRange)
         {
-            throw new InvalidCastException($"Casting the points returned an exception, which has the following message: {outOfRange.Message}", outOfRange);
+            throw new PointsCastException($"Casting the points returned an exception.", outOfRange)
+            {
+                From = points
+            };
         }
     }
-    /// <summary>
-    /// Increments the points.
-    /// </summary>
-    /// <param name="points">The points to increment.</param>
-    /// <returns>A new <see cref="Points"/> which has its amount incremented.</returns>
-    public static Points operator ++(Points points)
-        => new(points.Amount + 1);
     /// <summary>
     /// Adds to points together.
     /// </summary>
@@ -71,4 +73,12 @@ public readonly record struct Points
     /// <returns>A new point with the new result.</returns>
     public static Points operator +(Points left, Points right)
         => new(left.Amount + right.Amount);
+    /// <summary>
+    /// Multiplies the points together.
+    /// </summary>
+    /// <param name="left">The left point to multiply.</param>
+    /// <param name="right">The right point to multiply.</param>
+    /// <returns>A new <see cref="Points"/> after being multiplied.</returns>
+    public static Points operator *(Points left, Points right)
+        => new(left.Amount * right.Amount);
 }

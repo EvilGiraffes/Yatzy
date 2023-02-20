@@ -12,15 +12,16 @@ public class DiceRangeBelowMinium : Exception
     /// The current minimum.
     /// </summary>
     public int CurrentMinimum { get; init; }
+    /// <inheritdoc/>
     public DiceRangeBelowMinium()
     {
     }
-
+    /// <inheritdoc/>
     public DiceRangeBelowMinium(string message) : base(message)
     {
     }
-
-    public DiceRangeBelowMinium(string message, Exception inner) : base(message, inner)
+    /// <inheritdoc/>
+    public DiceRangeBelowMinium(string message, Exception innerException) : base(message, innerException)
     {
     }
 }
