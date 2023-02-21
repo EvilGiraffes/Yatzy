@@ -1,8 +1,6 @@
+﻿using Yatzy.Runner;
 
-
-using Yatzy.Utils;
-
-namespace Yatzy.Tests.UtilitiesTests;
+namespace Yatzy.Tests.Runner;
 
 public class PathHandlerTests
 {

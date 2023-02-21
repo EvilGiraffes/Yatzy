@@ -1,6 +1,6 @@
 ﻿using Yatzy.Dices;
 
-namespace Yatzy.Tests.RuleTests;
+namespace Yatzy.Tests.Main.RuleTests;
 public static class RuleHelper
 {
     public static IReadOnlyList<IDice> BuildHand(this Mock<IDice> diceMock, int count)

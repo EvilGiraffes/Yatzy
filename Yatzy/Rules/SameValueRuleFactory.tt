@@ -31,7 +31,7 @@ public static class SameValueRuleFactory
 	{
 	#>
 
-	// Generated Method.
+	// Generated Method <#= pair.Key #>.
 
 	/// <summary>
 	/// Represents a <see cref="SameValueRule{TDice}"/> of <#= pair.Key #> with the value of <#= pair.Value #>.
@@ -42,6 +42,21 @@ public static class SameValueRuleFactory
 	public static SameValueRule<TDice> <#= pair.Key #><TDice>(ILogger logger, IPointsCalculator pointsCalculator)
 		where TDice : IDice
 		=> new(logger, nameof(<#= pair.Key #>), <#= pair.Value #>, pointsCalculator);
+	
+	// Generated Override for Method <#= pair.Key #>.
+
+	/// <summary>
+	/// <inheritdoc cref="<#= pair.Key #>{TDice}(ILogger, IPointsCalculator)" path="/summary"/>
+	/// </summary>
+	/// <remarks>
+	/// <para>Uses the default implementation for <see cref="IPointsCalculator"/> in <see cref="<#= pair.Key #>{TDice}(ILogger, IPointsCalculator)"/>.</para>
+	/// <para>The default implementation is <see cref="FaceBasedCalculation"/>.</para>
+	/// </remarks>
+	/// <param name="logger"><inheritdoc cref="SameValueRule{TDice}.SameValueRule(ILogger, string, int, IPointsCalculator)" path="/param[@name='logger']"/></param>
+	/// <returns>A new <see cref="SameValueRule{TDice}"/> which contains the predetermined values.</returns>
+	public static SameValueRule<TDice> <#= pair.Key #><TDice>(ILogger logger)
+		where TDice : IDice
+		=> <#= pair.Key #><TDice>(logger, new FaceBasedCalculation());
 	<#
 	};
 	#>

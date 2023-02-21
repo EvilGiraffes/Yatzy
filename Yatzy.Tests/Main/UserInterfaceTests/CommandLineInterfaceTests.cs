@@ -1,6 +1,6 @@
 ﻿using Yatzy.UserInterface.CommandLine;
 
-namespace Yatzy.Tests.UserInterfaceTests;
+namespace Yatzy.Tests.Main.UserInterfaceTests;
 // TODO: Use mock instead of an interceptor.
 public class CommandLineInterfaceTests
 {

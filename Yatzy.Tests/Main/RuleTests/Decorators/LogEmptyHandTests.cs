@@ -2,7 +2,7 @@
 using Yatzy.Rules;
 using Yatzy.Rules.Decorators;
 
-namespace Yatzy.Tests.RuleTests.Decorators;
+namespace Yatzy.Tests.Main.RuleTests.Decorators;
 public class LogEmptyHandTests
 {
     readonly ITestOutputHelper output;

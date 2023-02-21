@@ -1,8 +1,4 @@
-﻿using Moq;
-
-using Serilog;
-
-namespace Yatzy.Tests.Utils;
+﻿namespace Yatzy.Tests.Utils;
 public static class MockHelper
 {
     public static Mock<ILogger> GetLogger()

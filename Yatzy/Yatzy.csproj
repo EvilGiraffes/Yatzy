@@ -1,12 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
+		<OutputType>Library</OutputType>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Config\**" />
+	  <EmbeddedResource Remove="Config\**" />
+	  <None Remove="Config\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <None Include="Rules\SameValueRuleFactory.Generated.cs">
@@ -24,12 +30,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Config\Yatzy.Development.config">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="Config\Yatzy.Production.config">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 		<None Update="Rules\SameValueRuleFactory.tt">
 		  <Generator>TextTemplatingFileGenerator</Generator>
 		  <LastGenOutput>SameValueRuleFactory.Generated.cs</LastGenOutput>

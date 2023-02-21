@@ -1,7 +1,7 @@
 ﻿using Serilog;
 using Serilog.Core;
 
-using Yatzy.Utils;
+using Yatzy.Runner;
 
 #if DEBUG
 string configType = "Development";

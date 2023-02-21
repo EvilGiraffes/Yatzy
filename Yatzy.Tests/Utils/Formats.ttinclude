@@ -1,5 +1,0 @@
-﻿<#+
-public const string ArgumentFormat = "arg{0}";
-public const string ArgumentWithTypeFormat = TypeFormat + " " + ArgumentFormat;
-#>
-<#@ include file="TypeHelper.tt"#>

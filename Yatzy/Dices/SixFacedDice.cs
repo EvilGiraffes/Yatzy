@@ -17,7 +17,7 @@ public sealed class SixFacedDice : IDice
     public int Face
     {
         get => _face;
-        set
+        private set
         {
             DiceFaceOutOfRange.Guard(logger, value, Range);
             _face = value;

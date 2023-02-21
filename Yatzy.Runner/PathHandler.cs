@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Yatzy.Utils;
+namespace Yatzy.Runner;
 /// <summary>
 /// Handles the path for the configuration files.
 /// </summary>

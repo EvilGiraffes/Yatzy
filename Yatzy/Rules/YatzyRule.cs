@@ -12,13 +12,14 @@ namespace Yatzy.Rules;
 public sealed class YatzyRule<TDice> : IRule<TDice>
     where TDice : IDice
 {
-    readonly ILogger logger;
-    readonly IPointsCalculator pointsCalculator;
     /// <summary>
-    /// The default points you get per value correct.
+    /// The default <see cref="IPointsCalculator"/> implementation.
     /// </summary>
+    /// <value>Contains a <see cref="FixedPointsPerValue"/> calculator with the value of 10.</value>
     public static IPointsCalculator DefaultPointsCalculator
         => new FixedPointsPerValue(10);
+    readonly ILogger logger;
+    readonly IPointsCalculator pointsCalculator;
     /// <summary>
     /// Creates a new instance of <see cref="YatzyRule{TDice}"/>.
     /// </summary>

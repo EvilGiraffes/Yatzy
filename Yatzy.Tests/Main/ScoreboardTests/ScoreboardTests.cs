@@ -1,7 +1,7 @@
 ﻿using Yatzy.Scoreboards;
 using Yatzy.Scoreboards.Renderers;
 
-namespace Yatzy.Tests.ScoreboardTests;
+namespace Yatzy.Tests.Main.ScoreboardTests;
 public class ScoreboardTests
 {
     readonly ITestOutputHelper output;

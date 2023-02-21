@@ -1,6 +1,6 @@
 ﻿using Yatzy.Errors;
 
-namespace Yatzy.Tests;
+namespace Yatzy.Tests.Main;
 public class DiceRangeTests
 {
     readonly ITestOutputHelper output;

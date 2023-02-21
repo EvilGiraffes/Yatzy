@@ -1,6 +1,6 @@
 ﻿using Yatzy.UserInterface.CommandLine;
 
-namespace Yatzy.Tests.UserInterfaceTests;
+namespace Yatzy.Tests.Main.UserInterfaceTests;
 public sealed class ConsoleInterceptor : IConsoleProvider
 {
     public ConsoleColor Background { get; set; } = DefaultBackground;

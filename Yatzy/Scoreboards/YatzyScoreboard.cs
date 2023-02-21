@@ -47,7 +47,7 @@ public sealed class YatzyScoreboard : IScoreboard<YatzyEventArgs>
     /// <param name="logger"><inheritdoc cref="YatzyScoreboard(ILogger, IRenderer)" path="/param[@name='logger']"/></param>
     /// <param name="renderer"><inheritdoc cref="YatzyScoreboard(ILogger, IRenderer)" path="/param[@name='renderer']"/></param>
     /// <param name="scores">The scoreboard being wrapped.</param>
-    public YatzyScoreboard(ILogger logger, IRenderer renderer, IDictionary<INameable, int> scores)
+    internal YatzyScoreboard(ILogger logger, IRenderer renderer, IDictionary<INameable, int> scores)
     {
         this.logger = logger.ForType<YatzyScoreboard>();
         this.renderer = renderer;

@@ -2,6 +2,7 @@
 
 using Yatzy.Dices;
 using Yatzy.PointsCalculators;
+using Yatzy.Utils;
 
 namespace Yatzy.Rules;
 /// <summary>
@@ -11,16 +12,29 @@ namespace Yatzy.Rules;
 public sealed class FullHouse<TDice> : IRule<TDice>
     where TDice : IDice
 {
+    /// <summary>
+    /// The default implementation of <see cref="IPointsCalculator"/> for this class.
+    /// </summary>
+    /// <value>Contains a <see cref="FaceBasedCalculation"/> calculator.</value>
+    public static IPointsCalculator DefaultPointsCalculator
+        => new FaceBasedCalculation();
     readonly ILogger logger;
     readonly IPointsCalculator pointsCalculator;
     /// <summary>
     /// Constructs a new instance of <see cref="FullHouse{TDice}"/>.
     /// </summary>
     /// <param name="logger">The logger used throughout this application.</param>
+    public FullHouse(ILogger logger) : this(logger, DefaultPointsCalculator)
+    {
+    }
+    /// <summary>
+    /// <inheritdoc cref="FullHouse(ILogger)" path="/summary"/>
+    /// </summary>
+    /// <param name="logger"><inheritdoc cref="FullHouse(ILogger)" path="/param[@name='logger']"/></param>
     /// <param name="pointsCalculator">The calculator defined to calculate the points.</param>
     public FullHouse(ILogger logger, IPointsCalculator pointsCalculator)
     {
-        this.logger = logger;
+        this.logger = logger.ForType<FullHouse<TDice>>();
         this.pointsCalculator = pointsCalculator;
     }
     // TODO: Implement.
