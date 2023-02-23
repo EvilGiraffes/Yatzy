@@ -1,8 +1,8 @@
 ﻿using Serilog;
 
 using Yatzy.Dices;
+using Yatzy.Logging;
 using Yatzy.PointsCalculators;
-using Yatzy.Utils;
 
 namespace Yatzy.Rules;
 /// <summary>
@@ -12,6 +12,10 @@ namespace Yatzy.Rules;
 public sealed class SameValueRule<TDice> : IRule<TDice>
     where TDice : IDice
 {
+    /// <inheritdoc/>
+    public Type LogType
+        => typeof(SameValueRule<TDice>);
+    // TODO: Handle unused values.
     readonly ILogger logger;
     readonly string identifier;
     readonly int face;
@@ -30,6 +34,8 @@ public sealed class SameValueRule<TDice> : IRule<TDice>
         this.face = face;
         this.pointsCalculator = pointsCalculator;
     }
+
+
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
@@ -40,7 +46,6 @@ public sealed class SameValueRule<TDice> : IRule<TDice>
                 continue;
             sum += pointsCalculator.Calculate(face);
         }
-        logger.Debug("Calculated points of the hand {Hand} to the amount of points {Points} with the rule specified as {Identifier}.", hand, sum, identifier);
         return sum;
     }
 }

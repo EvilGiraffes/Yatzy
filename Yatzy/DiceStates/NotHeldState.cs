@@ -1,8 +1,8 @@
 ﻿using Serilog;
 
 using Yatzy.Dices;
+using Yatzy.Logging;
 using Yatzy.RandomizerProviders;
-using Yatzy.Utils;
 
 namespace Yatzy.DiceStates;
 /// <summary>

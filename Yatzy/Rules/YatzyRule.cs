@@ -1,8 +1,8 @@
 ﻿using Serilog;
 
 using Yatzy.Dices;
+using Yatzy.Logging;
 using Yatzy.PointsCalculators;
-using Yatzy.Utils;
 
 namespace Yatzy.Rules;
 /// <summary>
@@ -12,12 +12,17 @@ namespace Yatzy.Rules;
 public sealed class YatzyRule<TDice> : IRule<TDice>
     where TDice : IDice
 {
+    /// <inheritdoc/>
+    public Type LogType
+        => typeof(YatzyRule<TDice>);
     /// <summary>
     /// The default <see cref="IPointsCalculator"/> implementation.
     /// </summary>
     /// <value>Contains a <see cref="FixedPointsPerValue"/> calculator with the value of 10.</value>
     public static IPointsCalculator DefaultPointsCalculator
         => new FixedPointsPerValue(10);
+
+
     readonly ILogger logger;
     readonly IPointsCalculator pointsCalculator;
     /// <summary>

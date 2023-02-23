@@ -8,6 +8,6 @@ public interface IPointsCalculator
     /// Calculates the points based on the sum.
     /// </summary>
     /// <param name="face">The face to base the calculation of.</param>
-    /// <returns>Points representing the points given.</returns>
+    /// <returns>a new <see cref="Points"/> representing the points given.</returns>
     Points Calculate(int face);
 }

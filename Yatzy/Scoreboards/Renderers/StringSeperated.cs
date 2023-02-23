@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-using Yatzy.Utils;
+using Yatzy.Logging;
 
 namespace Yatzy.Scoreboards.Renderers;
 /// <summary>

@@ -1,9 +1,9 @@
-﻿namespace Yatzy.Utils;
+﻿namespace Yatzy;
 // TESTME: Needs testing.
 /// <summary>
 /// Extentions for the type of <see cref="int"/>.
 /// </summary>
-public static class IntExt
+public static class DiceRangeExt
 {
     /// <summary>
     /// Checks if the value is within the specified dice range.

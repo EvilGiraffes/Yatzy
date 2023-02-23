@@ -4,7 +4,7 @@ using Serilog;
 
 using Yatzy.DiceStates;
 using Yatzy.Errors;
-using Yatzy.Utils;
+using Yatzy.Logging;
 
 namespace Yatzy.Dices;
 /// <summary>

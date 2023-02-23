@@ -3,19 +3,20 @@ using Yatzy.Rules;
 using Yatzy.Rules.Decorators;
 
 namespace Yatzy.Tests.Main.RuleTests.Decorators;
-public class LogEmptyHandTests
+public class EmptyHandHandler
 {
     readonly ITestOutputHelper output;
     readonly Mock<ILogger> loggerMock;
     readonly Mock<IReadOnlyList<IDice>> handMock;
     readonly Mock<IRule<IDice>> ruleMock;
-    readonly LogEmptyHand<IDice> systemUnderTest;
-    public LogEmptyHandTests(ITestOutputHelper output)
+    readonly EmptyHandHandler<IDice> systemUnderTest;
+    public EmptyHandHandler(ITestOutputHelper output)
     {
         this.output = output;
-        loggerMock = new();
+        loggerMock = MockHelper.GetLogger();
         handMock = new();
         ruleMock = new();
+        ruleMock.Setup(rule => rule.LogType).Returns(ruleMock.Object.GetType());
         systemUnderTest = new(ruleMock.Object, loggerMock.Object);
     }
     [Fact]
@@ -43,7 +44,7 @@ public class LogEmptyHandTests
     public void WrapInLogEmptyHand_Rule_WrapsRule()
     {
         IRule<IDice> wrapped = ruleMock.Object.WrapInLogEmptyHand(loggerMock.Object);
-        bool actual = wrapped is LogEmptyHand<IDice>;
+        bool actual = wrapped is EmptyHandHandler<IDice>;
         output.WriteExpectedTrue(actual);
         actual.Should().BeTrue();
     }
