@@ -1,5 +1,6 @@
 ﻿using Serilog;
 
+using Yatzy.Decoration;
 using Yatzy.Dices;
 using Yatzy.Logging;
 
@@ -15,6 +16,9 @@ public sealed class EmptyHandHandler<TDice> : IRule<TDice>
     /// <inheritdoc/>
     public Type LogType
         => wrapped.LogType;
+    /// <inheritdoc/>
+    public string Name
+        => wrapped.Name;
     readonly IRule<TDice> wrapped;
     readonly ILogger logger;
     /// <summary>
@@ -27,8 +31,6 @@ public sealed class EmptyHandHandler<TDice> : IRule<TDice>
         this.wrapped = wrapped;
         this.logger = logger.ForType(wrapped.LogType);
     }
-
-
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
@@ -45,18 +47,18 @@ public sealed class EmptyHandHandler<TDice> : IRule<TDice>
         => wrapped.GetType();
 }
 /// <summary>
-/// Defines functions for wrapping an <see cref="IRule{TDice}"/> in <see cref="EmptyHandHandler{TDice}"/>.
+/// Defines functions for wrapping an <see cref="IRule{TDice}"/> in an <see cref="Decorators.EmptyHandHandler{TDice}"/> instance.
 /// </summary>
 public static class EmptyHandlerWrappingExt
 {
     /// <summary>
-    /// Wraps the current rule in an instance of <see cref="EmptyHandHandler{TDice}"/>.
+    /// Wraps the <see cref="IRule{TDice}"/> in an <see cref="Decorators.EmptyHandHandler{TDice}"/> instance.
     /// </summary>
-    /// <typeparam name="TDice"><inheritdoc cref="EmptyHandHandler{TDice}" path="/typeparam[@name='TDice']"/></typeparam>
-    /// <param name="rule">The rule to wrap in <see cref="EmptyHandHandler{TDice}"/>.</param>
-    /// <param name="logger">The logger used throughout this application.</param>
-    /// <returns>A new <see cref="IRule{TDice}"/> wrapped in <see cref="EmptyHandHandler{TDice}"/>.</returns>
-    public static IRule<TDice> WrapInLogEmptyHand<TDice>(this IRule<TDice> rule, ILogger logger)
+    /// <typeparam name="TDice"><inheritdoc cref="Decorators.EmptyHandHandler{TDice}" path="/typeparam"/></typeparam>
+    /// <param name="context">The context of the rule it should wrap.</param>
+    /// <param name="logger"><inheritdoc cref="EmptyHandHandler{TDice}.EmptyHandHandler(IRule{TDice}, ILogger)" path="/param[@name='logger']"/></param>
+    /// <returns>A new instance of <see cref="Decorators.EmptyHandHandler{TDice}"/>.</returns>
+    public static IRule<TDice> EmptyHandHandler<TDice>(this WrapperContext<IRule<TDice>> context, ILogger logger)
         where TDice : IDice
-        => new EmptyHandHandler<TDice>(rule, logger);
+        => new EmptyHandHandler<TDice>(context.Context, logger);
 }

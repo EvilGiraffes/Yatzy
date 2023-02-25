@@ -25,7 +25,8 @@ namespace Yatzy.Rules;
 /// <summary>
 /// A factory to create predetermined <see cref="SameValueRule{TDice}"/>.
 /// </summary>
-public static class SameValueRuleFactory
+public static class SameValueRuleFactory<TDice>
+	where TDice : IDice
 {
 	<# foreach (KeyValuePair<string, int> pair in rules)
 	{
@@ -36,27 +37,23 @@ public static class SameValueRuleFactory
 	/// <summary>
 	/// Represents a <see cref="SameValueRule{TDice}"/> of <#= pair.Key #> with the value of <#= pair.Value #>.
 	/// </summary>
-	/// <param name="logger"><inheritdoc cref="SameValueRule{TDice}.SameValueRule(ILogger, string, int, IPointsCalculator)" path="/param[@name='logger']"/></param>
-	/// <param name="pointsCalculator"><inheritdoc cref="SameValueRule{TDice}.SameValueRule(ILogger, string, int, IPointsCalculator)" path="/param[@name='pointsCalculator']"/></param>
+	/// <param name="pointsCalculator"><inheritdoc cref="SameValueRule{TDice}.SameValueRule(string, int, IPointsCalculator)" path="/param[@name='pointsCalculator']"/></param>
 	/// <returns>A new <see cref="SameValueRule{TDice}"/> which contains the predetermined values.</returns>
-	public static SameValueRule<TDice> <#= pair.Key #><TDice>(ILogger logger, IPointsCalculator pointsCalculator)
-		where TDice : IDice
-		=> new(logger, nameof(<#= pair.Key #>), <#= pair.Value #>, pointsCalculator);
+	public static SameValueRule<TDice> <#= pair.Key #>(IPointsCalculator pointsCalculator)
+		=> new(nameof(<#= pair.Key #>), <#= pair.Value #>, pointsCalculator);
 	
-	// Generated Override for Method <#= pair.Key #>.
+	// Generated Override for <#= pair.Key #>.
 
 	/// <summary>
-	/// <inheritdoc cref="<#= pair.Key #>{TDice}(ILogger, IPointsCalculator)" path="/summary"/>
+	/// <inheritdoc cref="<#= pair.Key #>(IPointsCalculator)" path="/summary"/>
 	/// </summary>
 	/// <remarks>
-	/// <para>Uses the default implementation for <see cref="IPointsCalculator"/> in <see cref="<#= pair.Key #>{TDice}(ILogger, IPointsCalculator)"/>.</para>
+	/// <para>Uses the default implementation for <see cref="IPointsCalculator"/> in <see cref="<#= pair.Key #>(IPointsCalculator)"/>.</para>
 	/// <para>The default implementation is <see cref="FaceBasedCalculation"/>.</para>
 	/// </remarks>
-	/// <param name="logger"><inheritdoc cref="SameValueRule{TDice}.SameValueRule(ILogger, string, int, IPointsCalculator)" path="/param[@name='logger']"/></param>
 	/// <returns>A new <see cref="SameValueRule{TDice}"/> which contains the predetermined values.</returns>
-	public static SameValueRule<TDice> <#= pair.Key #><TDice>(ILogger logger)
-		where TDice : IDice
-		=> <#= pair.Key #><TDice>(logger, new FaceBasedCalculation());
+	public static SameValueRule<TDice> <#= pair.Key #>()
+		=> <#= pair.Key #>(new FaceBasedCalculation());
 	<#
 	};
 	#>

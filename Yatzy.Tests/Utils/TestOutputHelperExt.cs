@@ -21,4 +21,18 @@ public static class TestOutputHelperExt
         => WriteResult(output, true, actual);
     public static void WriteExpectedTrue<TSeperator>(this ITestOutputHelper output, bool actual, TSeperator seperator)
         => WriteResult(output, true, actual);
+    public static void WriteExpectedNull<T>(this ITestOutputHelper output, T? value, string seperator)
+        => output.WriteResult("null", value?.ToString() ?? "null", seperator);
+    public static void WriteExpectedNull<T>(this ITestOutputHelper output, T? value)
+        => WriteExpectedNull(output, value, DefaultSeperator);
+    public static void WriteExpectedNull<T, TSeperator>(this ITestOutputHelper output, T? value, TSeperator seperator)
+        where TSeperator : notnull
+        => WriteExpectedNull(output, value, seperator.ToString() ?? DefaultSeperator);
+    public static void WriteExpectedNotNull<T>(this ITestOutputHelper output, T? value, string seperator)
+        => output.WriteResult("notnull", value?.ToString() is null ? "null" : "notnull", seperator);
+    public static void WriteExpectedNotNull<T>(this ITestOutputHelper output, T? value)
+        => WriteExpectedNotNull(output, value, DefaultSeperator);
+    public static void WriteExpectedNotNull<T, TSeperator>(this ITestOutputHelper output, T? value, TSeperator seperator)
+        where TSeperator : notnull
+        => WriteExpectedNotNull(output, value, seperator.ToString() ?? DefaultSeperator);
 }

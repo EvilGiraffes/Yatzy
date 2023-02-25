@@ -22,6 +22,8 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
     /// <inheritdoc/>
     public Type LogType
         => typeof(TwoSplicedRule<TDice>);
+    /// <inheritdoc/>
+    public string Name { get; }
     readonly ILogger logger;
     readonly ISpliceStrategy splicer;
     readonly IPointsCalculator pointsCalculator;
@@ -30,12 +32,14 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
     /// Constructs a new instance of <see cref="TwoSplicedRule{TDice}"/>.
     /// </summary>
     /// <param name="logger">The logger used throughout this application.</param>
+    /// <param name="identifier">What to identify this rule as.</param>
     /// <param name="splicer">The splicing strategy to use in this rule.</param>
     /// <param name="pointsCalculator">The calculator defined to calculate the points.</param>
     /// <param name="counterFactory">A factory to create counters.</param>
-    public TwoSplicedRule(ILogger logger, ISpliceStrategy splicer, IPointsCalculator pointsCalculator, Func<ICounter<int>> counterFactory)
+    public TwoSplicedRule(ILogger logger, string identifier, ISpliceStrategy splicer, IPointsCalculator pointsCalculator, Func<ICounter<int>> counterFactory)
     {
         this.logger = logger.ForType<TwoSplicedRule<TDice>>();
+        Name = identifier;
         this.splicer = splicer;
         this.pointsCalculator = pointsCalculator;
         this.counterFactory = counterFactory;
@@ -49,8 +53,7 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
         counter.Count(hand.Select(dice => dice.Face));
         Bounds bounds = splicer.Splice(hand.Count);
         (int maxFace, int minFace) = GetMaxAndMinFace(counter, bounds);
-        Points result = HandlePoints(maxFace, minFace, bounds);
-        return result;
+        return HandlePoints(maxFace, minFace, bounds);
     }
     (int, int) GetMaxAndMinFace(ICounter<int> counter, Bounds bounds)
     {

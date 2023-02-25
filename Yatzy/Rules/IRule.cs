@@ -1,11 +1,12 @@
-﻿using Yatzy.Dices;
+﻿using Yatzy.Decoration;
+using Yatzy.Dices;
 
 namespace Yatzy.Rules;
 /// <summary>
 /// Defines a rule to calculate the points of a hand.
 /// </summary>
 /// <typeparam name="TDice">The dice in which this rule will be applicable for.</typeparam>
-public interface IRule<TDice> : IDecoratable
+public interface IRule<TDice> : IDecoratable, INameable
     where TDice : IDice
 {
     /// <summary>

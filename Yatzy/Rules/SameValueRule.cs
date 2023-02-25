@@ -1,7 +1,4 @@
-﻿using Serilog;
-
-using Yatzy.Dices;
-using Yatzy.Logging;
+﻿using Yatzy.Dices;
 using Yatzy.PointsCalculators;
 
 namespace Yatzy.Rules;
@@ -15,22 +12,20 @@ public sealed class SameValueRule<TDice> : IRule<TDice>
     /// <inheritdoc/>
     public Type LogType
         => typeof(SameValueRule<TDice>);
+    /// <inheritdoc/>
+    public string Name { get; }
     // TODO: Handle unused values.
-    readonly ILogger logger;
-    readonly string identifier;
     readonly int face;
     readonly IPointsCalculator pointsCalculator;
     /// <summary>
     /// Creates an instance of the a same value rule.
     /// </summary>
-    /// <param name="logger">The logger used throughtout the application.</param>
-    /// <param name="identifier">Identifier which this rule will be named.</param>
+    /// <param name="identifier">What to identify this rule as.</param>
     /// <param name="face">The value of the face its looking for.</param>
     /// <param name="pointsCalculator">The calculator to calculate points.</param>
-    public SameValueRule(ILogger logger, string identifier, int face, IPointsCalculator pointsCalculator)
+    public SameValueRule(string identifier, int face, IPointsCalculator pointsCalculator)
     {
-        this.logger = logger.ForType<SameValueRule<TDice>>();
-        this.identifier = identifier;
+        Name = identifier;
         this.face = face;
         this.pointsCalculator = pointsCalculator;
     }

@@ -1,10 +1,10 @@
 ﻿using Serilog;
 
+using Yatzy.Decoration;
 using Yatzy.Dices;
 using Yatzy.Logging;
 
 namespace Yatzy.Rules.Decorators;
-// TESTME: Needs some testing.
 /// <summary>
 /// Represents a logger decorator which logs the points recieved.
 /// </summary>
@@ -15,12 +15,15 @@ public sealed class PointsLogger<TDice> : IRule<TDice>
     /// <inheritdoc/>
     public Type LogType
         => wrapped.LogType;
+    /// <inheritdoc/>
+    public string Name
+        => wrapped.Name;
     readonly ILogger logger;
     readonly IRule<TDice> wrapped;
     /// <summary>
     /// Constructs a new instance of <see cref="PointsLogger{TDice}"/>
     /// </summary>
-    /// <param name="wrapped">The <see cref="IRule{TDice}"/> it wraps.</param>
+    /// <param name="wrapped">The rule it should wrap.</param>
     /// <param name="logger">The logger used throughout this application.</param>
     public PointsLogger(IRule<TDice> wrapped, ILogger logger)
     {
@@ -37,18 +40,18 @@ public sealed class PointsLogger<TDice> : IRule<TDice>
 }
 // TODO: Find smoother way to write wrappings.
 /// <summary>
-/// Wraps an <see cref="IRule{TDice}"/> in <see cref="PointsLogger{TDice}"/>.
+/// Wraps an <see cref="IRule{TDice}"/> in <see cref="Decorators.PointsLogger{TDice}"/>.
 /// </summary>
 public static class PointsLoggerWrapperExt
 {
     /// <summary>
-    /// Will wrap the current rule in a <see cref="PointsLogger{TDice}"/>.
+    /// Will wrap the <see cref="IRule{TDice}"/> in a <see cref="Decorators.PointsLogger{TDice}"/>.
     /// </summary>
-    /// <typeparam name="TDice"><inheritdoc cref="PointsLogger{TDice}" path="/typeparam"/></typeparam>
-    /// <param name="rule"><inheritdoc cref="PointsLogger{TDice}.PointsLogger(IRule{TDice}, ILogger)" path="/param[@name='wrapped']"/></param>
+    /// <typeparam name="TDice"><inheritdoc cref="Decorators.PointsLogger{TDice}"/></typeparam>
+    /// <param name="context">The context of the rule it should wrap.</param>
     /// <param name="logger"><inheritdoc cref="PointsLogger{TDice}.PointsLogger(IRule{TDice}, ILogger)" path="/param[@name='logger']"/></param>
-    /// <returns>A new <see cref="PointsLogger{TDice}"/> wrapped with <see cref="IRule{TDice}"/>.</returns>
-    public static IRule<TDice> WrapInPointsLogger<TDice>(this IRule<TDice> rule, ILogger logger)
+    /// <returns>A new instance of <see cref="Decorators.PointsLogger{TDice}"/>.</returns>
+    public static IRule<TDice> PointsLogger<TDice>(this WrapperContext<IRule<TDice>> context, ILogger logger)
         where TDice : IDice
-        => new PointsLogger<TDice>(rule, logger);
+        => new PointsLogger<TDice>(context.Context, logger);
 }

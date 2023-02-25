@@ -15,14 +15,15 @@ public sealed class YatzyRule<TDice> : IRule<TDice>
     /// <inheritdoc/>
     public Type LogType
         => typeof(YatzyRule<TDice>);
+    /// <inheritdoc/>
+    public string Name
+        => nameof(YatzyRule<TDice>);
     /// <summary>
     /// The default <see cref="IPointsCalculator"/> implementation.
     /// </summary>
     /// <value>Contains a <see cref="FixedPointsPerValue"/> calculator with the value of 10.</value>
     public static IPointsCalculator DefaultPointsCalculator
         => new FixedPointsPerValue(10);
-
-
     readonly ILogger logger;
     readonly IPointsCalculator pointsCalculator;
     /// <summary>

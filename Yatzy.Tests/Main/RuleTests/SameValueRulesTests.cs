@@ -6,14 +6,12 @@ namespace Yatzy.Tests.Main.RuleTests;
 public class SameValueRulesTests
 {
     readonly ITestOutputHelper output;
-    readonly Mock<ILogger> loggerMock;
     readonly Mock<IDice> diceMock;
     readonly Mock<IPointsCalculator> pointsCalculatorMock;
     const string Identifier = nameof(SameValueRulesTests);
     public SameValueRulesTests(ITestOutputHelper output)
     {
         this.output = output;
-        loggerMock = MockHelper.GetLogger();
         diceMock = new();
         pointsCalculatorMock = new();
     }
@@ -66,6 +64,6 @@ public class SameValueRulesTests
     SameValueRule<IDice> BuildRule(int face, int pointsPerValue)
     {
         pointsCalculatorMock.Setup(calculator => calculator.Calculate(It.IsAny<int>())).Returns(pointsPerValue);
-        return new(loggerMock.Object, Identifier, face, pointsCalculatorMock.Object);
+        return new(Identifier, face, pointsCalculatorMock.Object);
     }
 }

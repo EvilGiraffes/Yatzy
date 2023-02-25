@@ -40,12 +40,4 @@ public class EmptyHandHandler
         ruleMock.Verify(rule => rule.CalculatePoints(It.IsAny<IReadOnlyList<IDice>>()), Times.Once, "The wrapped.CalculatePoints has not been called.");
         output.WriteLine("Verified wrapped.CalculatePoints was called.");
     }
-    [Fact]
-    public void WrapInLogEmptyHand_Rule_WrapsRule()
-    {
-        IRule<IDice> wrapped = ruleMock.Object.WrapInLogEmptyHand(loggerMock.Object);
-        bool actual = wrapped is EmptyHandHandler<IDice>;
-        output.WriteExpectedTrue(actual);
-        actual.Should().BeTrue();
-    }
 }

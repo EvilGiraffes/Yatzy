@@ -1,4 +1,5 @@
-﻿namespace Yatzy;
+﻿namespace Yatzy.Decoration;
+// TODO: Should implement wrappable.
 /// <summary>
 /// Represents a decoratable type.
 /// </summary>
