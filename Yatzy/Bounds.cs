@@ -4,7 +4,7 @@ namespace Yatzy;
 /// <summary>
 /// Represents a boundary.
 /// </summary>
-public readonly struct Bounds
+public readonly record struct Bounds
 {
 
     /// <summary>
@@ -20,10 +20,10 @@ public readonly struct Bounds
     /// </summary>
     /// <param name="low">The lower value.</param>
     /// <param name="high">The higher value.</param>
-    /// <exception cref="BoundsInvalidConstructorArgument">Thrown if the <paramref name="low"/> value greater than or equal to the <paramref name="high"/> value.</exception>
+    /// <exception cref="BoundsInvalidConstructorArgument">Thrown if the <paramref name="low"/> value greater than the <paramref name="high"/> value.</exception>
     public Bounds(int low, int high)
     {
-        if (low >= high)
+        if (low > high)
             throw new BoundsInvalidConstructorArgument($"The {nameof(low)} value is higher than or equal to the {nameof(high)} value.", nameof(low))
             {
                 Low = low,

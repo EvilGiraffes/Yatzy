@@ -3,7 +3,7 @@
 /// Publisher of events.
 /// </summary>
 /// <typeparam name="TEventArgs">The arguments to the event.</typeparam>
-public interface IPublisher<TEventArgs> where TEventArgs : EventArgs
+public interface IPublisher<TEventArgs>
 {
     /// <summary>
     /// Subscribes to the publishers event with the current callback.

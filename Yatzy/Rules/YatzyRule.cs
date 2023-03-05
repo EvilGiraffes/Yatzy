@@ -1,6 +1,7 @@
 ﻿using Serilog;
 
 using Yatzy.Dices;
+using Yatzy.Extentions;
 using Yatzy.Logging;
 using Yatzy.PointsCalculators;
 
@@ -46,6 +47,8 @@ public sealed class YatzyRule<TDice> : IRule<TDice>
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
+        if (hand.IsEmpty())
+            return Points.Empty;
         Points sum = Points.Empty;
         int face = hand[0].Face;
         foreach (IDice dice in hand)

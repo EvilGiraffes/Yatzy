@@ -3,6 +3,7 @@
 using Yatzy.Counting;
 using Yatzy.Counting.Counters;
 using Yatzy.Dices;
+using Yatzy.Extentions;
 using Yatzy.Logging;
 using Yatzy.PointsCalculators;
 using Yatzy.Rules.Strategies.Splicing;
@@ -28,6 +29,7 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
     readonly ISpliceStrategy splicer;
     readonly IPointsCalculator pointsCalculator;
     readonly Func<ICounter<int>> counterFactory;
+    readonly record struct Faces(int Max, int Min);
     /// <summary>
     /// Constructs a new instance of <see cref="TwoSplicedRule{TDice}"/>.
     /// </summary>
@@ -49,39 +51,39 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
+        if (hand.IsEmpty())
+            return Points.Empty;
         ICounter<int> counter = counterFactory();
         counter.Count(hand.Select(dice => dice.Face));
         Bounds bounds = splicer.Splice(hand.Count);
-        (int maxFace, int minFace) = GetMaxAndMinFace(counter, bounds);
-        return HandlePoints(maxFace, minFace, bounds);
+        Faces faces = GetMaxAndMinFace(counter, bounds);
+        return HandlePoints(faces, bounds);
     }
-    (int, int) GetMaxAndMinFace(ICounter<int> counter, Bounds bounds)
+    Faces GetMaxAndMinFace(ICounter<int> counter, Bounds bounds)
     {
         int maxHigherBound = int.MinValue;
         int maxLowerBound = int.MinValue;
-        foreach ((int face, int count) in counter)
+        foreach ((int face, int count) in counter.FilterByAmount(amount => amount >= bounds.Low))
         {
-            if (count >= bounds.High)
+            if (count < bounds.High)
             {
-                if (face < maxHigherBound)
-                    continue;
-                maxLowerBound = Math.Max(maxHigherBound, maxLowerBound);
-                maxHigherBound = face;
+                maxLowerBound = Math.Max(face, maxLowerBound);
                 continue;
             }
-            if (count < bounds.Low)
+            if (face < maxHigherBound)
                 continue;
-            maxLowerBound = Math.Max(face, maxLowerBound);
+            maxLowerBound = Math.Max(maxHigherBound, maxLowerBound);
+            maxHigherBound = face;
         }
         logger.Debug(
             "Calculated the max and min face from {Counter}. From the bound found the maximum face for the {MaxBound} count to be {MaxCount}, and from the minimum face for the {MinBound} count to be {MinCount}.",
             counter, bounds.High, maxHigherBound, bounds.Low, maxLowerBound);
-        return (maxHigherBound, maxLowerBound);
+        return new(maxHigherBound, maxLowerBound);
     }
-    Points HandlePoints(int maxFace, int minFace, Bounds bounds)
+    Points HandlePoints(Faces faces, Bounds bounds)
     {
-        if (maxFace < 1 || minFace < 1)
+        if (faces.Max < 1 || faces.Min < 1)
             return Points.Empty;
-        return pointsCalculator.Calculate(maxFace) * bounds.High + pointsCalculator.Calculate(minFace) * bounds.High;
+        return pointsCalculator.Calculate(faces.Max) * bounds.High + pointsCalculator.Calculate(faces.Min) * bounds.Low;
     }
 }

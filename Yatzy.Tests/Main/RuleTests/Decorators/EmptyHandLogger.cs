@@ -3,14 +3,14 @@ using Yatzy.Rules;
 using Yatzy.Rules.Decorators;
 
 namespace Yatzy.Tests.Main.RuleTests.Decorators;
-public class EmptyHandHandler
+public class EmptyHandLogger
 {
     readonly ITestOutputHelper output;
     readonly Mock<ILogger> loggerMock;
     readonly Mock<IReadOnlyList<IDice>> handMock;
     readonly Mock<IRule<IDice>> ruleMock;
-    readonly EmptyHandHandler<IDice> systemUnderTest;
-    public EmptyHandHandler(ITestOutputHelper output)
+    readonly EmptyHandLogger<IDice> systemUnderTest;
+    public EmptyHandLogger(ITestOutputHelper output)
     {
         this.output = output;
         loggerMock = MockHelper.GetLogger();

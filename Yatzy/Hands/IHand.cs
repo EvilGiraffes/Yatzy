@@ -1,7 +1,7 @@
 ﻿using Yatzy.Dices;
 using Yatzy.Errors;
 
-namespace Yatzy;
+namespace Yatzy.Hands;
 /// <summary>
 /// Defines the current hand.
 /// </summary>

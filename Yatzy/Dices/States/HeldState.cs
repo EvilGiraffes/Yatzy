@@ -1,9 +1,8 @@
 ﻿using Serilog;
 
-using Yatzy.Dices;
 using Yatzy.Logging;
 
-namespace Yatzy.DiceStates;
+namespace Yatzy.Dices.States;
 /// <summary>
 /// Represents a state where the dice is held.
 /// </summary>

@@ -1,15 +1,14 @@
-﻿using Yatzy.Counting.Counters;
+﻿using Yatzy.Counting;
+using Yatzy.Counting.Counters;
 using Yatzy.Dices;
 using Yatzy.PointsCalculators;
 using Yatzy.Rules;
 using Yatzy.Rules.Strategies.Splicing;
 
 namespace Yatzy.Tests.Main.RuleTests;
-// TODO: Finish tests.
 public class TwoSplicedRuleTests
 {
     readonly ITestOutputHelper output;
-    readonly Mock<IRule<IDice>> ruleMock;
     readonly Mock<IDice> diceMock;
     readonly Mock<ILogger> loggerMock;
     readonly Mock<ISpliceStrategy> spliceMock;
@@ -20,7 +19,6 @@ public class TwoSplicedRuleTests
     public TwoSplicedRuleTests(ITestOutputHelper output)
     {
         this.output = output;
-        ruleMock = new();
         diceMock = new();
         loggerMock = MockHelper.GetLogger();
         spliceMock = new();
@@ -28,14 +26,87 @@ public class TwoSplicedRuleTests
         counterMock = new();
         systemUnderTest = new(loggerMock.Object, Identifier, spliceMock.Object, pointsCalculatorMock.Object, () => counterMock.Object);
     }
-    /*
-     * Possbilities:
-     * - Hand is empty and therefore counter is empty.                                          Expecting no points.
-     * - Lower becomes the higher as the count is greater.                                      Expecting points.
-     * - Lower is set between face and current lower.                                           Expecting Any.
-     * - Only ever getting a Lower count.                                                       Expecting no points.
-     * - High bound insures Low bound will get a new value if it is higher than the previous.   Expecting points.
-     * - Max face or Min face is below 1 and returns empty points.                              Expecting no points.
-     * - Both are above 1 and thereby calculates the points according to its formula.           Expecting points.
-     */
+    [Fact]
+    public void CalculatePoints_EmptyHand_NoPoints()
+    {
+        IReadOnlyList<IDice> emptyHand = RuleHelper.EmptyHand;
+        Points expected = Points.Empty;
+        Points actual = systemUnderTest.CalculatePoints(emptyHand);
+        output.WriteResult(expected, actual);
+        actual.Should().Be(expected);
+    }
+    [Fact]
+    public void CalculatePoints_NoDiceAboveHighCount_NoPoints()
+    {
+        Bounds bounds = new(2, 3);
+        IEnumerable<Count<int>> counts = new Count<int>[]
+        {
+            new(1, bounds.Low),
+            new(2, 1),
+            new(3, 1)
+        };
+        counts.SetAsEnumeratorFor(counterMock);
+        spliceMock.SpliceReturns(bounds);
+        Points expected = Points.Empty;
+        Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
+        output.WriteResult(expected, actual);
+        actual.Should().Be(expected);
+    }
+    [Fact]
+    public void CalculatePoints_AllAboveHighBound_Points()
+    {
+        Bounds bounds = new(2, 3);
+        int minPoint = 1;
+        int maxPoint = 2;
+        IEnumerable<Count<int>> counts = new Count<int>[]
+        {
+            new(minPoint, bounds.High),
+            new(maxPoint, bounds.High)
+        };
+        counts.SetAsEnumeratorFor(counterMock);
+        pointsCalculatorMock.CalculationReturnsFace();
+        spliceMock.SpliceReturns(bounds);
+        Points expected = CalculateExpected(maxPoint, minPoint, bounds);
+        Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
+        output.WriteResult(expected, actual);
+        actual.Should().Be(expected);
+    }
+    [Fact]
+    public void CalculatePoints_OldHighBoundHigherThanLowBound_Points()
+    {
+        Bounds bounds = new(2, 3);
+        int minPoint = 2;
+        int maxPoint = 3;
+        IEnumerable<Count<int>> counts = new Count<int>[]
+        {
+            new(minPoint - 1, bounds.Low),
+            new(minPoint, bounds.High),
+            new(maxPoint, bounds.High)
+        };
+        counts.SetAsEnumeratorFor(counterMock);
+        pointsCalculatorMock.CalculationReturnsFace();
+        spliceMock.SpliceReturns(bounds);
+        Points expected = CalculateExpected(maxPoint, minPoint, bounds);
+        Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
+        output.WriteResult(expected, actual);
+        actual.Should().Be(expected);
+    }
+    [Fact]
+    public void CalculatePoints_FacesAreBelowOne_NoPoints()
+    {
+        Bounds bounds = new(2, 3);
+        IEnumerable<Count<int>> counts = new Count<int>[]
+        {
+            new(-1, bounds.Low),
+            new(0, bounds.High)
+        };
+        counts.SetAsEnumeratorFor(counterMock);
+        spliceMock.SpliceReturns(bounds);
+        Points expected = Points.Empty;
+        Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
+        output.WriteResult(expected, actual);
+        actual.Should().Be(expected);
+    }
+    static Points CalculateExpected(int max, int min, Bounds bounds)
+        => max * bounds.High + min * bounds.Low;
 }

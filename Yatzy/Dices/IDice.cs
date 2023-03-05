@@ -1,4 +1,4 @@
-﻿using Yatzy.DiceStates;
+﻿using Yatzy.Dices.States;
 
 namespace Yatzy.Dices;
 /// <summary>

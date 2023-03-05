@@ -1,26 +1,27 @@
-﻿using Yatzy.Errors;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Yatzy.Errors;
 
 namespace Yatzy;
 /// <summary>
 /// Represents points recieved.
 /// </summary>
-public readonly record struct Points
+public readonly struct Points : IEquatable<Points>
 {
     /// <summary>
     /// The amount of points that has been given.
     /// </summary>
-    public int Amount { get; private init; } = MinimumPoints;
+    public int Amount { get; } = MinimumPoints;
     /// <summary>
     /// Whether there is more than 0 points.
     /// </summary>
     public bool HasPoints
-        => Amount > 0;
+        => Amount > MinimumPoints;
     /// <summary>
     /// An instance of points where it has not been recieved. Used when you wont give points.
     /// </summary>
-    /// <value>This has an equivilant value of constructing a <see cref="Points"/> structure with <see cref="MinimumPoints"/> passed in the constructor.</value>
-    public static Points Empty
-        => new(MinimumPoints);
+    /// <value>Will always be the same value, which would be the same as passing <see cref="MinimumPoints"/> to the constructor.</value>
+    public static Points Empty { get; } = new(MinimumPoints);
     /// <summary>
     /// The absolute maximum amount of points allowed to give.
     /// </summary>
@@ -36,7 +37,7 @@ public readonly record struct Points
     /// <exception cref="PointsOutOfRange">Thrown if the value is below <see cref="MinimumPoints"/></exception>
     public Points(int points) : this()
     {
-        if (points < MinimumPoints || points > MaximumPoints)
+        if (points is < MinimumPoints or > MaximumPoints)
             throw new PointsOutOfRange
             {
                 Maximum = MaximumPoints,
@@ -45,6 +46,23 @@ public readonly record struct Points
             };
         Amount = points;
     }
+    /// <inheritdoc/>
+    public bool Equals(Points other)
+    {
+        if (!HasPoints && !other.HasPoints)
+            return true;
+        return Amount == other.Amount;
+    }
+    /// <inheritdoc/>
+    public override bool Equals([NotNullWhen(true)] object? obj)
+        => obj is Points points && Equals(points);
+    /// <inheritdoc/>
+    public override int GetHashCode()
+        => HasPoints ? Amount ^ Amount >> 32 : MinimumPoints ^ MinimumPoints >> 32;
+    /// <inheritdoc/>
+    public override string ToString()
+        => HasPoints ? $"{Amount} {nameof(Points)}" : $"No {nameof(Points)}";
+
     /// <summary>
     /// Will cast from an <see cref="int"/> to a new <see cref="Points"/>.
     /// </summary>
@@ -81,4 +99,20 @@ public readonly record struct Points
     /// <returns>A new <see cref="Points"/> after being multiplied.</returns>
     public static Points operator *(Points left, Points right)
         => new(left.Amount * right.Amount);
+    /// <summary>
+    /// Checks for the equality of the points.
+    /// </summary>
+    /// <param name="left">The left most point to check.</param>
+    /// <param name="right">The right most point to check.</param>
+    /// <returns><see langword="true"/> if they are equal, <see langword="false"/> if not.</returns>
+    public static bool operator ==(Points left, Points right)
+        => left.Equals(right);
+    /// <summary>
+    /// Checks for inequality of the points.
+    /// </summary>
+    /// <param name="left"><inheritdoc cref="operator ==(Points, Points)" path="/param[@name='left']"/></param>
+    /// <param name="right"><inheritdoc cref="operator ==(Points, Points)" path="/param[@name='right']"/></param>
+    /// <returns><see langword="true"/> if they are not equal, <see langword="false"/> if they are equal.</returns>
+    public static bool operator !=(Points left, Points right)
+        => !(left == right);
 }

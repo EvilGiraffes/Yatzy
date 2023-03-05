@@ -1,10 +1,9 @@
 ﻿using Serilog;
 
-using Yatzy.Dices;
 using Yatzy.Logging;
 using Yatzy.RandomizerProviders;
 
-namespace Yatzy.DiceStates;
+namespace Yatzy.Dices.States;
 /// <summary>
 /// Represents a state where the dice is free to roll.
 /// </summary>

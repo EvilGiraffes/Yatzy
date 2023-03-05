@@ -1,5 +1,5 @@
 ﻿using Yatzy.Dices;
-using Yatzy.DiceStates;
+using Yatzy.Dices.States;
 using Yatzy.Errors;
 
 namespace Yatzy.Tests.Main.DiceTests;

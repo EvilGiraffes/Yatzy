@@ -3,7 +3,7 @@
 /// Subscriber to events by a <see cref="IPublisher{TEventArgs}"/>.
 /// </summary>
 /// <typeparam name="TEventArgs">Arguments that should be passed to the callback.</typeparam>
-public interface ISubscriber<TEventArgs> where TEventArgs : EventArgs
+public interface ISubscriber<TEventArgs>
 {
     /// <summary>
     /// Gets the current callback to subscribe with.

@@ -16,7 +16,17 @@ public class SameValueRulesTests
         pointsCalculatorMock = new();
     }
     [Fact]
-    public void Points_OneItemInHand_CalculatesOnePoint()
+    public void CalculatePoints_NoItemsInHand_NoPoints()
+    {
+        IReadOnlyList<IDice> hand = RuleHelper.EmptyHand;
+        SameValueRule<IDice> rule = BuildRule(1, 1);
+        Points expected = Points.Empty;
+        Points actual = rule.CalculatePoints(hand);
+        output.WriteResult(expected, actual);
+        actual.Should().Be(expected);
+    }
+    [Fact]
+    public void CalculatePoints_OneItemInHand_CalculatesOnePoint()
     {
         int pointsPerValue = 10;
         int face = 1;
@@ -32,7 +42,7 @@ public class SameValueRulesTests
         actual.Should().Be(expected);
     }
     [Fact]
-    public void Points_FullHand_SumsAllPoints()
+    public void CalculatePoints_FullHand_SumsAllPoints()
     {
         int pointsPerValue = 10;
         int face = 1;
@@ -48,7 +58,7 @@ public class SameValueRulesTests
         actual.Should().Be(expected);
     }
     [Fact]
-    public void Points_NoneMatching_NotRecieved()
+    public void CalculatePoints_NoneMatching_NotRecieved()
     {
         int pointsPerValue = 10;
         int face = 1;

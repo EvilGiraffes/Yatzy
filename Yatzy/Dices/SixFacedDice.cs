@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
 
 using Serilog;
-
-using Yatzy.DiceStates;
+using Yatzy.Dices.States;
 using Yatzy.Errors;
 using Yatzy.Logging;
 

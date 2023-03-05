@@ -1,6 +1,4 @@
-﻿using Yatzy.Dices;
-
-namespace Yatzy.DiceStates;
+﻿namespace Yatzy.Dices.States;
 /// <summary>
 /// Represents a dice rolling state.
 /// </summary>

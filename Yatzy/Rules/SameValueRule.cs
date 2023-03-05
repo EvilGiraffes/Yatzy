@@ -1,4 +1,5 @@
 ﻿using Yatzy.Dices;
+using Yatzy.Extentions;
 using Yatzy.PointsCalculators;
 
 namespace Yatzy.Rules;
@@ -34,6 +35,8 @@ public sealed class SameValueRule<TDice> : IRule<TDice>
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
+        if (hand.IsEmpty())
+            return Points.Empty;
         Points sum = Points.Empty;
         foreach (IDice dice in hand)
         {
