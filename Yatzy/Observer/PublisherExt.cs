@@ -13,7 +13,7 @@ public static class PublisherExt
     /// <param name="publisher">The publisher to subscribe to.</param>
     /// <param name="subscriber">The subscriber who will subscribe to the publisher.</param>
     public static void Subscribe<TEventArgs>(this IPublisher<TEventArgs> publisher, ISubscriber<TEventArgs> subscriber)
-        => publisher.Subscribe(subscriber.SubscriberCallback);
+        => publisher.Subscribe(subscriber.EventCallback);
     /// <summary>
     /// Subscribes multiple subscriber instances to a publisher.
     /// </summary>

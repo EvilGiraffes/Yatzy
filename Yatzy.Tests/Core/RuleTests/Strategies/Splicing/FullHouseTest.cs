@@ -1,6 +1,6 @@
 ﻿using Yatzy.Rules.Strategies.Splicing;
 
-namespace Yatzy.Tests.Main.RuleTests.Strategies.Splicing;
+namespace Yatzy.Tests.Core.RuleTests.Strategies.Splicing;
 public class FullHouseTest
 {
     readonly ITestOutputHelper output;

@@ -35,9 +35,7 @@ public sealed class FullHouse : ISpliceStrategy
     static Bounds HandleSplicing(int count, double splice)
     {
         if (count % 2 == 0)
-        {
             return new((int) splice, (int) splice);
-        }
         int lowerBound = (int) Math.Floor(splice);
         int higherBound = (int) Math.Ceiling(splice);
         return new(lowerBound, higherBound);

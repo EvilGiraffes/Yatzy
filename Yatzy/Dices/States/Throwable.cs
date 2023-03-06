@@ -7,7 +7,7 @@ namespace Yatzy.Dices.States;
 /// <summary>
 /// Represents a state where the dice is free to roll.
 /// </summary>
-public sealed class NotHeldState : IDiceState
+public sealed class Throwable : IDiceState
 {
     readonly ILogger logger;
     readonly IRandomizerProvider randomizer;
@@ -16,9 +16,9 @@ public sealed class NotHeldState : IDiceState
     /// </summary>
     /// <param name="logger">The logger instance used throughtout the application.</param>
     /// <param name="randomizer">A provider to randomize the value.</param>
-    public NotHeldState(ILogger logger, IRandomizerProvider randomizer)
+    public Throwable(ILogger logger, IRandomizerProvider randomizer)
     {
-        this.logger = logger.ForType<NotHeldState>();
+        this.logger = logger.ForType<Throwable>();
         this.randomizer = randomizer;
     }
     /// <summary>

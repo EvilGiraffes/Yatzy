@@ -8,6 +8,6 @@ public interface ISubscriber<TEventArgs>
     /// <summary>
     /// Gets the current callback to subscribe with.
     /// </summary>
-    Action<TEventArgs?> SubscriberCallback { get; }
+    void EventCallback(TEventArgs? args);
 }
 

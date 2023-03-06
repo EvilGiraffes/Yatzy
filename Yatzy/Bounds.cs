@@ -24,7 +24,7 @@ public readonly record struct Bounds
     public Bounds(int low, int high)
     {
         if (low > high)
-            throw new BoundsInvalidConstructorArgument($"The {nameof(low)} value is higher than or equal to the {nameof(high)} value.", nameof(low))
+            throw new BoundsInvalidConstructorArgument($"The {nameof(low)} value is higher than the {nameof(high)} value.", nameof(low))
             {
                 Low = low,
                 High = high

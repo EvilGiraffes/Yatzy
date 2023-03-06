@@ -1,9 +1,8 @@
-﻿using Yatzy.Counting.Counters;
-using Yatzy.Utils;
+﻿using Yatzy.Utils;
 
-namespace Yatzy.Counting;
+namespace Yatzy.Counting.Counters;
 /// <summary>
-/// Extentions for the ICounters.
+/// Extentions for the <see cref="ICounter{T}"/>.
 /// </summary>
 public static class ICounterExt
 {

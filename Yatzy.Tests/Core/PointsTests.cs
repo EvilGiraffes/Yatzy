@@ -1,6 +1,6 @@
 ﻿using Yatzy.Errors;
 
-namespace Yatzy.Tests.Main;
+namespace Yatzy.Tests.Core;
 public class PointsTests
 {
     readonly ITestOutputHelper output;
@@ -49,5 +49,35 @@ public class PointsTests
         Points points = new(Points.MinimumPoints);
         output.WriteExpectedFalse(points.HasPoints);
         points.HasPoints.Should().BeFalse();
+    }
+    [Fact]
+    public void Max_RightIsMax_Right()
+    {
+        Points left = new(Points.MinimumPoints + 1);
+        Points right = left + 1;
+        Points expected = right;
+        Points actual = Points.Max(left, right);
+        output.WriteResult(expected, actual);
+        actual.Should().Be(expected);
+    }
+    [Fact]
+    public void Max_LeftIsMax_Left()
+    {
+        Points right = new(Points.MinimumPoints + 1);
+        Points left = right + 1;
+        Points expected = left;
+        Points actual = Points.Max(left, right);
+        output.WriteResult(expected, actual);
+        actual.Should().Be(expected);
+    }
+    [Fact]
+    public void Max_Equal_HasSameAmount()
+    {
+        int expected = Points.MinimumPoints + 1;
+        Points left = new(expected);
+        Points right = new(expected);
+        int actual = Points.Max(left, right).Amount;
+        output.WriteResult(expected, actual);
+        actual.Should().Be(expected);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Serilog;
 
-using Yatzy.Counting;
 using Yatzy.Counting.Counters;
 using Yatzy.Dices;
 using Yatzy.Extentions;
@@ -46,8 +45,6 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
         this.pointsCalculator = pointsCalculator;
         this.counterFactory = counterFactory;
     }
-
-
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {

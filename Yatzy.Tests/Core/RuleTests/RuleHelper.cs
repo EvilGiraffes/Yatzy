@@ -4,7 +4,7 @@ using Yatzy.Dices;
 using Yatzy.PointsCalculators;
 using Yatzy.Rules.Strategies.Splicing;
 
-namespace Yatzy.Tests.Main.RuleTests;
+namespace Yatzy.Tests.Core.RuleTests;
 public static class RuleHelper
 {
     public static IReadOnlyList<IDice> EmptyHand

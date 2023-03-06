@@ -2,7 +2,7 @@
 using Yatzy.Dices.States;
 using Yatzy.Errors;
 
-namespace Yatzy.Tests.Main.DiceTests;
+namespace Yatzy.Tests.Core.DiceTests;
 public class SixFacedDiceTests
 {
     readonly Mock<IDiceState> stateMock;

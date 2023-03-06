@@ -6,16 +6,16 @@ namespace Yatzy.Dices.States;
 /// <summary>
 /// Represents a state where the dice is held.
 /// </summary>
-public sealed class HeldState : IDiceState
+public sealed class Held : IDiceState
 {
     readonly ILogger logger;
     /// <summary>
-    /// Constructs a new instance of the <see cref="HeldState"/>.
+    /// Constructs a new instance of the <see cref="Held"/>.
     /// </summary>
     /// <param name="logger">The logger used throughout this application.</param>
-    public HeldState(ILogger logger)
+    public Held(ILogger logger)
     {
-        this.logger = logger.ForType<HeldState>();
+        this.logger = logger.ForType<Held>();
     }
 
     /// <summary>

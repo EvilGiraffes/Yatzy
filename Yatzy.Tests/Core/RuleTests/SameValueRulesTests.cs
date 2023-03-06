@@ -2,7 +2,7 @@
 using Yatzy.PointsCalculators;
 using Yatzy.Rules;
 
-namespace Yatzy.Tests.Main.RuleTests;
+namespace Yatzy.Tests.Core.RuleTests;
 public class SameValueRulesTests
 {
     readonly ITestOutputHelper output;

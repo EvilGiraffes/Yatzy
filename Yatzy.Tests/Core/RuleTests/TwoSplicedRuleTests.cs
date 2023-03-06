@@ -5,7 +5,7 @@ using Yatzy.PointsCalculators;
 using Yatzy.Rules;
 using Yatzy.Rules.Strategies.Splicing;
 
-namespace Yatzy.Tests.Main.RuleTests;
+namespace Yatzy.Tests.Core.RuleTests;
 public class TwoSplicedRuleTests
 {
     readonly ITestOutputHelper output;

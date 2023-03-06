@@ -1,7 +1,7 @@
 ﻿using Yatzy.Decoration;
 using Yatzy.Errors;
 
-namespace Yatzy.Tests.Main.DecorationTests;
+namespace Yatzy.Tests.Core.DecorationTests;
 public class WrappingContextTests
 {
     readonly ITestOutputHelper output;

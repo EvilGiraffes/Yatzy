@@ -6,7 +6,7 @@ namespace Yatzy;
 /// <summary>
 /// Represents points recieved.
 /// </summary>
-public readonly struct Points : IEquatable<Points>
+public readonly struct Points : IEquatable<Points>, IComparable<Points>
 {
     /// <summary>
     /// The amount of points that has been given.
@@ -54,6 +54,9 @@ public readonly struct Points : IEquatable<Points>
         return Amount == other.Amount;
     }
     /// <inheritdoc/>
+    public int CompareTo(Points other)
+            => Amount.CompareTo(other.Amount);
+    /// <inheritdoc/>
     public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is Points points && Equals(points);
     /// <inheritdoc/>
@@ -62,7 +65,18 @@ public readonly struct Points : IEquatable<Points>
     /// <inheritdoc/>
     public override string ToString()
         => HasPoints ? $"{Amount} {nameof(Points)}" : $"No {nameof(Points)}";
-
+    /// <summary>
+    /// Gets the max between the points.
+    /// </summary>
+    /// <param name="left">The left most to compare.</param>
+    /// <param name="right">The right most to compare.</param>
+    /// <returns>The maximum of the two, the left if it is equal.</returns>
+    public static Points Max(Points left, Points right)
+    {
+        if (right > left)
+            return right;
+        return left;
+    }
     /// <summary>
     /// Will cast from an <see cref="int"/> to a new <see cref="Points"/>.
     /// </summary>
@@ -115,4 +129,36 @@ public readonly struct Points : IEquatable<Points>
     /// <returns><see langword="true"/> if they are not equal, <see langword="false"/> if they are equal.</returns>
     public static bool operator !=(Points left, Points right)
         => !(left == right);
+    /// <summary>
+    /// Will check if the <paramref name="left"/> is less than the <paramref name="right"/>.
+    /// </summary>
+    /// <param name="left">Left most to check.</param>
+    /// <param name="right">Right most to check.</param>
+    /// <returns><see langword="true"/> if it is less than the <paramref name="right"/>, <see langword="false"/> if not.</returns>
+    public static bool operator <(Points left, Points right)
+        => left.CompareTo(right) < 0;
+    /// <summary>
+    /// Will check if the <paramref name="left"/> is less or equal to the <paramref name="right"/>.
+    /// </summary>
+    /// <param name="left"><inheritdoc cref="operator {(Points, Points)" path="/param[@name='left']"/></param>
+    /// <param name="right"><inheritdoc cref="operator {(Points, Points)" path="/param[@name='right']"/></param>
+    /// <returns><see langword="true"/> if it is less or equal to the <paramref name="right"/>, <see langword="false"/> if not.</returns>
+    public static bool operator <=(Points left, Points right)
+        => left.CompareTo(right) <= 0;
+    /// <summary>
+    /// Will check if the <paramref name="left"/> is greater than the <paramref name="right"/>.
+    /// </summary>
+    /// <param name="left"><inheritdoc cref="operator {(Points, Points)" path="/param[@name='left']"/></param>
+    /// <param name="right"><inheritdoc cref="operator {(Points, Points)" path="/param[@name='right']"/></param>
+    /// <returns><see langword="true"/> if it is greater than the <paramref name="right"/>, <see langword="false"/> if not.</returns>
+    public static bool operator >(Points left, Points right)
+        => left.CompareTo(right) > 0;
+    /// <summary>
+    /// Will check if the <paramref name="left"/> is greater or equal to the <paramref name="right"/>.
+    /// </summary>
+    /// <param name="left"><inheritdoc cref="operator {(Points, Points)" path="/param[@name='left']"/></param>
+    /// <param name="right"><inheritdoc cref="operator {(Points, Points)" path="/param[@name='right']"/></param>
+    /// <returns><see langword="true"/> if it is greater or equal to the <paramref name="right"/>, <see langword="false"/> if not.</returns>
+    public static bool operator >=(Points left, Points right)
+        => left.CompareTo(right) >= 0;
 }
