@@ -21,7 +21,7 @@ public class DiceRangeTests
             MaximumFace = MaximumFace
         };
         bool actual = systemUnderTest.InRangeOf(otherRange);
-        output.WriteExpectedTrue(actual);
+        output.Write().Expecting(actual).ToBeTrue();
         actual.Should().BeTrue();
     }
     [Fact]
@@ -33,7 +33,7 @@ public class DiceRangeTests
             MaximumFace = MaximumFace
         };
         bool actual = systemUnderTest.InRangeOf(otherRange);
-        output.WriteExpectedFalse(actual);
+        output.Write().Expecting(actual).ToBeFalse();
         actual.Should().BeFalse();
     }
     [Fact]
@@ -45,39 +45,43 @@ public class DiceRangeTests
             MaximumFace = MaximumFace + 1
         };
         bool actual = systemUnderTest.InRangeOf(otherRange);
-        output.WriteExpectedFalse(actual);
+        output.Write().Expecting(actual).ToBeFalse();
         actual.Should().BeFalse();
     }
     [Fact]
     public void PropertyInitMinimum_ValidRange_DoesNotThrowException()
     {
-        Action init = () => _ = new DiceRange
+        Action act = () => _ = new DiceRange
         {
             MinimumFace = DiceRange.MinimumLowerBound,
             MaximumFace = int.MaxValue
         };
-        init.Should().NotThrow<DiceRangeBelowMinium>();
+        output.Write().Expecting(act).ToNotThrowException();
+        act.Should().NotThrow<DiceRangeBelowMinium>();
     }
     [Fact]
     public void PropertyInitMinimum_InvalidRange_ThrowsException()
     {
-        Action faultyInit = () => _ = new DiceRange
+        Action act = () => _ = new DiceRange
         {
             MinimumFace = DiceRange.MinimumLowerBound - 1,
             MaximumFace = int.MaxValue
         };
-        faultyInit.Should().Throw<DiceRangeBelowMinium>();
+        output.Write().Expecting(act).ToThrow<DiceRangeBelowMinium>();
+        act.Should().Throw<DiceRangeBelowMinium>();
     }
     [Fact]
     public void Ctor_MinimumInRange_DoesNotThrowException()
     {
-        Action ctor = () => _ = new DiceRange(DiceRange.MinimumLowerBound, int.MaxValue);
-        ctor.Should().NotThrow<DiceRangeBelowMinium>();
+        Action act = () => _ = new DiceRange(DiceRange.MinimumLowerBound, int.MaxValue);
+        output.Write().Expecting(act).ToNotThrowException();
+        act.Should().NotThrow<DiceRangeBelowMinium>();
     }
     [Fact]
     public void Ctor_MinumumOutOfRange_ThrowsException()
     {
-        Action faultyCtor = () => _ = new DiceRange(DiceRange.MinimumLowerBound - 1, int.MaxValue);
-        faultyCtor.Should().Throw<DiceRangeBelowMinium>();
+        Action act = () => _ = new DiceRange(DiceRange.MinimumLowerBound - 1, int.MaxValue);
+        output.Write().Expecting(act).ToThrow<DiceRangeBelowMinium>();
+        act.Should().Throw<DiceRangeBelowMinium>();
     }
 }

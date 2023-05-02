@@ -1,4 +1,4 @@
-﻿namespace Yatzy.PointsCalculators;
+﻿namespace Yatzy.Rules.PointsCalculators;
 /// <summary>
 /// Represents an <see cref="IPointsCalculator"/> which gives fixed points per calculation.
 /// </summary>

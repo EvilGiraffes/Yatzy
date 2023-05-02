@@ -1,7 +1,7 @@
 ﻿using Yatzy.Counting;
 using Yatzy.Counting.Counters;
 using Yatzy.Dices;
-using Yatzy.PointsCalculators;
+using Yatzy.Rules.PointsCalculators;
 using Yatzy.Rules.Strategies.Splicing;
 
 namespace Yatzy.Tests.Core.RuleTests;
@@ -9,6 +9,8 @@ public static class RuleHelper
 {
     public static IReadOnlyList<IDice> EmptyHand
         => Array.Empty<IDice>();
+    public static IReadOnlyList<IDice> AnyHand
+        => EmptyHand;
     public static IReadOnlyList<IDice> BuildHand(this Mock<IDice> diceMock, int count = 5)
     {
         IDice[] hand = new IDice[count];

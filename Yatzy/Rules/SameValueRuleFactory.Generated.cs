@@ -4,7 +4,7 @@
 using Serilog;
 
 using Yatzy.Dices;
-using Yatzy.PointsCalculators;
+using Yatzy.Rules.PointsCalculators;
 
 namespace Yatzy.Rules;
 /// <summary>

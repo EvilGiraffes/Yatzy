@@ -17,7 +17,7 @@ public class FullHouseTest
     {
         Bounds expected = new(3, 3);
         Bounds actual = systemUnderTest.Splice(6);
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
     [Fact]
@@ -25,7 +25,7 @@ public class FullHouseTest
     {
         Bounds expected = new(2, 3);
         Bounds actual = systemUnderTest.Splice(5);
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
 }

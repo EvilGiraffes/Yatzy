@@ -1,6 +1,7 @@
 ﻿using Yatzy.Dices;
-using Yatzy.PointsCalculators;
 using Yatzy.Rules;
+using Yatzy.Rules.PointsCalculators;
+using Yatzy.Tests.Core.FluentAssertionExt;
 
 namespace Yatzy.Tests.Core.RuleTests;
 public class YatzyRuleTests
@@ -29,7 +30,7 @@ public class YatzyRuleTests
         diceMock.Setup(dice => dice.Face).Returns(face);
         Points expected = fixedPoints * amount;
         Points actual = systemUnderTest.CalculatePoints(hand);
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
     [Fact]
@@ -48,9 +49,8 @@ public class YatzyRuleTests
                 count++;
                 return face;
             });
-        Points expected = Points.Empty;
         Points actual = systemUnderTest.CalculatePoints(hand);
-        output.WriteResult(expected, actual);
-        actual.Should().Be(expected);
+        output.Write().Expecting(actual).ToBeEmpty();
+        actual.Should().BeEmpty();
     }
 }

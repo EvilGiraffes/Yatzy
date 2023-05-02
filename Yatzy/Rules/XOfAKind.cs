@@ -1,14 +1,12 @@
 ﻿using Serilog;
 
-using Yatzy.Counting;
 using Yatzy.Counting.Counters;
 using Yatzy.Dices;
 using Yatzy.Errors;
 using Yatzy.Logging;
-using Yatzy.PointsCalculators;
+using Yatzy.Rules.PointsCalculators;
 
 namespace Yatzy.Rules;
-// TESTME: This will need testing.
 /// <summary>
 /// Represents an <see cref="IRule{TDice}"/> where there is an X amount of kind.
 /// </summary>
@@ -17,49 +15,41 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
     where TDice : IDice
 {
     /// <inheritdoc/>
-    public Type LogType
-        => typeof(XOfAKind<TDice>);
-    /// <inheritdoc/>
     public string Name { get; }
     /// <summary>
-    /// The absolute minimum count allowed.
+    /// The absolute inclusive minimum count allowed.
     /// </summary>
     public const int MinimumCount = 1;
     /// <summary>
-    /// The absolute maximum count allowed.
+    /// The absolute inclusive maximum count allowed.
     /// </summary>
     public const int MaximumCount = int.MaxValue;
-    readonly ILogger logger;
+    /// <summary>
+    /// Transforms X into a <see cref="string"/> representation.
+    /// </summary>
+    /// <param name="x">The integrer to transform.</param>
+    /// <returns>A new <see cref="string"/> representing <paramref name="x"/></returns>
+    public delegate string XTransform(int x);
     readonly IPointsCalculator pointsCalculator;
-    readonly Func<ICounter<int>> counterFactory;
-    readonly int ofAKind;
+    readonly CounterFactory<int> counterFactory;
+    readonly int x;
     /// <summary>
     /// Constructs a new instance of <see cref="XOfAKind{TDice}"/>.
     /// </summary>
     /// <param name="logger">The logger used throughout this application.</param>
+    /// <param name="x">The amount of similar values that has to be equal.</param>
+    /// <param name="xTransform">The transformation for <paramref name="x"/> to name the instance with <see cref="XOfAKind{TDice}.Name"/>.</param>
     /// <param name="pointsCalculator">The strategy to calculate the points based on.</param>
-    /// <param name="counterFactory">The factory to create a counter.</param>
-    /// <param name="ofAKind">The amount of similar values that has to be equal.</param>
     /// <exception cref="XOfAKindOutOfRange">Throw when the count is in the incorrect range.</exception>
-    public XOfAKind(ILogger logger, IPointsCalculator pointsCalculator, Func<ICounter<int>> counterFactory, int ofAKind)
+    /// <param name="counterFactory">The factory to create a counter.</param>
+    public XOfAKind(ILogger logger, int x, XTransform xTransform, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory)
     {
-        this.logger = logger.ForType<XOfAKind<TDice>>();
+        ILogger constructorLogger = logger.ForType<XOfAKind<TDice>>();
+        VerifyX(constructorLogger, x);
+        this.x = x;
         this.pointsCalculator = pointsCalculator;
         this.counterFactory = counterFactory;
-        if (ofAKind is < MinimumCount or > MaximumCount)
-        {
-            this.logger.Error(
-                "Construction failed. The count is out of range. The count given is {Count}, the range it is expected to be within is {MinimumCount}-{MaximumCount}",
-                ofAKind, MinimumCount, MaximumCount);
-            throw new XOfAKindOutOfRange()
-            {
-                Given = ofAKind,
-                Minimum = MinimumCount,
-                Maximum = MaximumCount
-            };
-        }
-        this.ofAKind = ofAKind;
-        Name = $"{ofAKind}OfAKind";
+        Name = $"{xTransform(x)}OfAKind";
     }
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
@@ -67,11 +57,25 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
         Points result = Points.Empty;
         ICounter<int> counter = counterFactory();
         counter.Count(hand.Select(dice => dice.Face));
-        foreach (Count<int> count in counter.FilterByAmount(amount => amount >= ofAKind))
+        foreach ((int item, _) in counter.FilterByAmount(amount => amount >= x))
         {
-            Points recieved = pointsCalculator.Calculate(count.Item) * ofAKind;
+            Points recieved = pointsCalculator.Calculate(item) * x;
             result = Points.Max(result, recieved);
         }
         return result;
+    }
+    static void VerifyX(ILogger logger, int x)
+    {
+        if (x is not < MinimumCount and not > MaximumCount)
+            return;
+        logger.Error(
+            "Construction failed. The count is out of range. The count given is {Count}, the range it is expected to be within is {MinimumCount}-{MaximumCount}",
+            x, MinimumCount, MaximumCount);
+        throw new XOfAKindOutOfRange()
+        {
+            Given = x,
+            Minimum = MinimumCount,
+            Maximum = MaximumCount
+        };
     }
 }

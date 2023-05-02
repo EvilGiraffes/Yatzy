@@ -16,7 +16,7 @@ public class EmptyHandLogger
         loggerMock = MockHelper.GetLogger();
         handMock = new();
         ruleMock = new();
-        ruleMock.Setup(rule => rule.LogType).Returns(ruleMock.Object.GetType());
+        ruleMock.Setup(rule => rule.WrappedLogType).Returns(ruleMock.Object.GetType());
         systemUnderTest = new(ruleMock.Object, loggerMock.Object);
     }
     [Fact]
@@ -26,7 +26,7 @@ public class EmptyHandLogger
         handMock.Setup(hand => hand.Count).Returns(0);
         Points expected = Points.Empty;
         Points actual = systemUnderTest.CalculatePoints(handMock.Object);
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
         loggerMock.Verify(logger => logger.Warning(It.IsAny<string>()), Times.Once, "logger.Warning has not been called, or been called too many times.");
         output.WriteLine("Verified logger.Warning has been called.");

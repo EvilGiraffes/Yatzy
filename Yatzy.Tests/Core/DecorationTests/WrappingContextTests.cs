@@ -35,34 +35,34 @@ public class WrappingContextTests
     {
         IInterface expected = new InterfaceImplementor();
         WrapperContext<IInterface> context = new(expected);
-        output.WriteResult(expected, context.Context);
+        output.Write().Expecting(expected).ToBe(context.Context);
         context.Context.Should().BeSameAs(expected);
     }
     [Fact]
     public void Context_NoValue_ContainsNull()
     {
         WrapperContext<IInterface> context = new();
-        output.WriteExpectedNull(context.Context);
+        output.Write().Expecting(context.Context).ToBeNull();
         context.Context.Should().BeNull();
     }
-    class Faulty : IDecoratable
+    class Faulty : ILogWrappable
     {
-        public Type LogType => throw new NotImplementedException();
+        public Type WrappedLogType => throw new NotImplementedException();
     }
-    interface IInterface : IDecoratable
+    interface IInterface : ILogWrappable
     {
     }
-    abstract class AbstractClass : IDecoratable
+    abstract class AbstractClass : ILogWrappable
     {
-        public abstract Type LogType { get; }
+        public abstract Type WrappedLogType { get; }
     }
     class InterfaceImplementor : IInterface
     {
-        public Type LogType => throw new NotImplementedException();
+        public Type WrappedLogType => throw new NotImplementedException();
     }
     class AbstractImplementor : AbstractClass
     {
-        public override Type LogType => throw new NotImplementedException();
+        public override Type WrappedLogType => throw new NotImplementedException();
     }
 
 }

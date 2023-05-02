@@ -1,4 +1,4 @@
-﻿using Yatzy.Utils;
+﻿using Yatzy.Extentions;
 
 namespace Yatzy.Counting.Counters;
 /// <summary>

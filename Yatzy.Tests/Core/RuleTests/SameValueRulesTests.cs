@@ -1,6 +1,7 @@
 ﻿using Yatzy.Dices;
-using Yatzy.PointsCalculators;
 using Yatzy.Rules;
+using Yatzy.Rules.PointsCalculators;
+using Yatzy.Tests.Core.FluentAssertionExt;
 
 namespace Yatzy.Tests.Core.RuleTests;
 public class SameValueRulesTests
@@ -20,10 +21,9 @@ public class SameValueRulesTests
     {
         IReadOnlyList<IDice> hand = RuleHelper.EmptyHand;
         SameValueRule<IDice> rule = BuildRule(1, 1);
-        Points expected = Points.Empty;
         Points actual = rule.CalculatePoints(hand);
-        output.WriteResult(expected, actual);
-        actual.Should().Be(expected);
+        output.Write().Expecting(actual).ToBeEmpty();
+        actual.Should().BeEmpty();
     }
     [Fact]
     public void CalculatePoints_OneItemInHand_CalculatesOnePoint()
@@ -38,7 +38,7 @@ public class SameValueRulesTests
             .Setup(dice => dice.Face)
             .Returns(() => diceValue++);
         Points actual = rule.CalculatePoints(hand);
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
     [Fact]
@@ -54,7 +54,7 @@ public class SameValueRulesTests
             .Setup(dice => dice.Face)
             .Returns(face);
         Points actual = rule.CalculatePoints(hand);
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
     [Fact]
@@ -68,8 +68,8 @@ public class SameValueRulesTests
             .Setup(dice => dice.Face)
             .Returns(face + 1);
         Points actual = rule.CalculatePoints(hand);
-        output.WriteResult(Points.Empty, actual);
-        actual.Should().Be(Points.Empty);
+        output.Write().Expecting(actual).ToBeEmpty();
+        actual.Should().BeEmpty();
     }
     SameValueRule<IDice> BuildRule(int face, int pointsPerValue)
     {

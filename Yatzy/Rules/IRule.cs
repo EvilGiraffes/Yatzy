@@ -6,7 +6,7 @@ namespace Yatzy.Rules;
 /// Defines a rule to calculate the points of a hand.
 /// </summary>
 /// <typeparam name="TDice">The dice in which this rule will be applicable for.</typeparam>
-public interface IRule<TDice> : IDecoratable, INameable
+public interface IRule<TDice> : INameable, ILogWrappable
     where TDice : IDice
 {
     /// <summary>

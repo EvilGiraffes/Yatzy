@@ -14,6 +14,5 @@ public static class WrapperExt
     /// <returns>A <see cref="WrapperContext{TAbstraction}"/> with <typeparamref name="TDecoratable"/> instance as the context.</returns>
     /// <exception cref="NonAbstractionTypeParam{TGiven}"><inheritdoc cref="WrapperContext{TAbstraction}.WrapperContext()" path="/exception"/></exception>
     public static WrapperContext<TDecoratable> WrapIn<TDecoratable>(this TDecoratable decoratable)
-        where TDecoratable : IDecoratable
         => decoratable;
 }

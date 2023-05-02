@@ -1,4 +1,4 @@
-﻿namespace Yatzy.Utils;
+﻿namespace Yatzy.Extentions;
 /// <summary>
 /// Contains extentions for <see cref="IEnumerable{T}"/>.
 /// </summary>

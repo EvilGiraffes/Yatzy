@@ -3,7 +3,7 @@
 using Yatzy.Dices;
 using Yatzy.Extentions;
 using Yatzy.Logging;
-using Yatzy.PointsCalculators;
+using Yatzy.Rules.PointsCalculators;
 
 namespace Yatzy.Rules;
 /// <summary>
@@ -13,9 +13,6 @@ namespace Yatzy.Rules;
 public sealed class YatzyRule<TDice> : IRule<TDice>
     where TDice : IDice
 {
-    /// <inheritdoc/>
-    public Type LogType
-        => typeof(YatzyRule<TDice>);
     /// <inheritdoc/>
     public string Name
         => nameof(YatzyRule<TDice>);

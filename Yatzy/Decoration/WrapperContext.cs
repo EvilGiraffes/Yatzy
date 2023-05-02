@@ -9,7 +9,6 @@ namespace Yatzy.Decoration;
 /// </remarks>
 /// <typeparam name="TAbstraction">The abstract type context.</typeparam>
 public readonly struct WrapperContext<TAbstraction>
-    where TAbstraction : IDecoratable
 {
     /// <summary>
     /// The context to wrap in.

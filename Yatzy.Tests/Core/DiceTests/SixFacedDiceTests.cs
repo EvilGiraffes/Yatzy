@@ -5,6 +5,7 @@ using Yatzy.Errors;
 namespace Yatzy.Tests.Core.DiceTests;
 public class SixFacedDiceTests
 {
+    // TODO: Add output.
     readonly Mock<IDiceState> stateMock;
     readonly Mock<ILogger> loggerMock;
     readonly SixFacedDice systemUnderTest;
@@ -49,29 +50,29 @@ public class SixFacedDiceTests
     public void FaceSet_TooSmall_ThrowsException()
     {
         stateMock.Setup(state => state.Roll(It.IsAny<IDice>(), It.IsAny<DiceRange>())).Returns(range.MinimumFace - 1);
-        Action faultyMethod = systemUnderTest.Roll;
-        faultyMethod.Should().Throw<DiceFaceOutOfRange>();
+        Action act = systemUnderTest.Roll;
+        act.Should().Throw<DiceFaceOutOfRange>();
     }
     [Fact]
     public void FaceSet_TooLarge_ThrowsException()
     {
         stateMock.Setup(state => state.Roll(It.IsAny<IDice>(), It.IsAny<DiceRange>())).Returns(range.MaximumFace + 1);
-        Action faultyMethod = systemUnderTest.Roll;
-        faultyMethod.Should().Throw<DiceFaceOutOfRange>();
+        Action act = systemUnderTest.Roll;
+        act.Should().Throw<DiceFaceOutOfRange>();
     }
     [Fact]
     public void FaceSet_LowerEdge_DoesNotThrowException()
     {
         stateMock.Setup(state => state.Roll(It.IsAny<IDice>(), It.IsAny<DiceRange>())).Returns(range.MinimumFace);
-        Action method = systemUnderTest.Roll;
-        method.Should().NotThrow<DiceFaceOutOfRange>();
+        Action act = systemUnderTest.Roll;
+        act.Should().NotThrow<DiceFaceOutOfRange>();
     }
     [Fact]
     public void FaceSet_UpperEdge_DoesNotThrowException()
     {
         stateMock.Setup(state => state.Roll(It.IsAny<IDice>(), It.IsAny<DiceRange>())).Returns(range.MaximumFace);
-        Action method = systemUnderTest.Roll;
-        method.Should().NotThrow<DiceFaceOutOfRange>();
+        Action act = systemUnderTest.Roll;
+        act.Should().NotThrow<DiceFaceOutOfRange>();
     }
     static Func<int> ToggleInterceptor(SixFacedDice dice, int alteringValue)
     {

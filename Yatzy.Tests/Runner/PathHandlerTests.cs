@@ -14,7 +14,7 @@ public class PathHandlerTests
     {
         string expected = PathHandler.ConfigName + PathHandler.ConfigExtention;
         string actual = PathHandler.GetFileName(null);
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
     [Fact]
@@ -23,7 +23,7 @@ public class PathHandlerTests
         const string configType = "Testing";
         string expected = $"{PathHandler.ConfigName}.{configType}{PathHandler.ConfigExtention}";
         string actual = PathHandler.GetFileName(configType);
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
     [Fact]
@@ -32,7 +32,7 @@ public class PathHandlerTests
         const string fileName = "Testing.txt";
         string expected = $@"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}Config{Path.DirectorySeparatorChar}{fileName}";
         string actual = PathHandler.GetConfigPath(fileName);
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Yatzy.Dices;
 using Yatzy.Extentions;
-using Yatzy.PointsCalculators;
+using Yatzy.Rules.PointsCalculators;
 
 namespace Yatzy.Rules;
 /// <summary>
@@ -10,9 +10,6 @@ namespace Yatzy.Rules;
 public sealed class SameValueRule<TDice> : IRule<TDice>
     where TDice : IDice
 {
-    /// <inheritdoc/>
-    public Type LogType
-        => typeof(SameValueRule<TDice>);
     /// <inheritdoc/>
     public string Name { get; }
     // TODO: Handle unused values.
@@ -30,8 +27,6 @@ public sealed class SameValueRule<TDice> : IRule<TDice>
         this.face = face;
         this.pointsCalculator = pointsCalculator;
     }
-
-
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {

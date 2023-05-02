@@ -1,9 +1,10 @@
 ﻿using Yatzy.Counting;
 using Yatzy.Counting.Counters;
 using Yatzy.Dices;
-using Yatzy.PointsCalculators;
 using Yatzy.Rules;
+using Yatzy.Rules.PointsCalculators;
 using Yatzy.Rules.Strategies.Splicing;
+using Yatzy.Tests.Core.FluentAssertionExt;
 
 namespace Yatzy.Tests.Core.RuleTests;
 public class TwoSplicedRuleTests
@@ -30,10 +31,9 @@ public class TwoSplicedRuleTests
     public void CalculatePoints_EmptyHand_NoPoints()
     {
         IReadOnlyList<IDice> emptyHand = RuleHelper.EmptyHand;
-        Points expected = Points.Empty;
         Points actual = systemUnderTest.CalculatePoints(emptyHand);
-        output.WriteResult(expected, actual);
-        actual.Should().Be(expected);
+        output.Write().Expecting(actual).ToBeEmpty();
+        actual.Should().BeEmpty();
     }
     [Fact]
     public void CalculatePoints_NoDiceAboveHighCount_NoPoints()
@@ -47,10 +47,9 @@ public class TwoSplicedRuleTests
         };
         counts.SetAsEnumeratorFor(counterMock);
         spliceMock.SpliceReturns(bounds);
-        Points expected = Points.Empty;
         Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
-        output.WriteResult(expected, actual);
-        actual.Should().Be(expected);
+        output.Write().Expecting(actual).ToBeEmpty();
+        actual.Should().BeEmpty();
     }
     [Fact]
     public void CalculatePoints_AllAboveHighBound_Points()
@@ -68,7 +67,7 @@ public class TwoSplicedRuleTests
         spliceMock.SpliceReturns(bounds);
         Points expected = CalculateExpected(maxPoint, minPoint, bounds);
         Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
     [Fact]
@@ -88,7 +87,7 @@ public class TwoSplicedRuleTests
         spliceMock.SpliceReturns(bounds);
         Points expected = CalculateExpected(maxPoint, minPoint, bounds);
         Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
     [Fact]
@@ -102,10 +101,9 @@ public class TwoSplicedRuleTests
         };
         counts.SetAsEnumeratorFor(counterMock);
         spliceMock.SpliceReturns(bounds);
-        Points expected = Points.Empty;
         Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
-        output.WriteResult(expected, actual);
-        actual.Should().Be(expected);
+        output.Write().Expecting(actual).ToBeEmpty();
+        actual.Should().BeEmpty();
     }
     static Points CalculateExpected(int max, int min, Bounds bounds)
         => max * bounds.High + min * bounds.Low;

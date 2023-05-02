@@ -1,4 +1,4 @@
-﻿namespace Yatzy.PointsCalculators;
+﻿namespace Yatzy.Rules.PointsCalculators;
 /// <summary>
 /// Represents a an object capable of giving points based on the value.
 /// </summary>

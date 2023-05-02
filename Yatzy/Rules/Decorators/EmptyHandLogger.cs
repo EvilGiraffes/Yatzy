@@ -15,8 +15,8 @@ public sealed class EmptyHandLogger<TDice> : IRule<TDice>
     where TDice : IDice
 {
     /// <inheritdoc/>
-    public Type LogType
-        => wrapped.LogType;
+    public Type WrappedLogType
+        => wrapped.WrappedLogType;
     /// <inheritdoc/>
     public string Name
         => wrapped.Name;
@@ -30,7 +30,7 @@ public sealed class EmptyHandLogger<TDice> : IRule<TDice>
     public EmptyHandLogger(IRule<TDice> wrapped, ILogger logger)
     {
         this.wrapped = wrapped;
-        this.logger = logger.ForType(wrapped.LogType);
+        this.logger = logger.ForType(wrapped.WrappedLogType);
     }
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
@@ -40,12 +40,6 @@ public sealed class EmptyHandLogger<TDice> : IRule<TDice>
         logger.Warning("The hand is empty, cannot calculate the rules with an empty hand.");
         return Points.Empty;
     }
-    /// <summary>
-    /// Gets the type of the wrapped object.
-    /// </summary>
-    /// <returns></returns>
-    new public Type GetType()
-        => wrapped.GetType();
 }
 /// <summary>
 /// Defines functions for wrapping an <see cref="IRule{TDice}"/> in an <see cref="Decorators.EmptyHandLogger{TDice}"/> instance.

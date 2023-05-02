@@ -13,8 +13,8 @@ public sealed class PointsLogger<TDice> : IRule<TDice>
     where TDice : IDice
 {
     /// <inheritdoc/>
-    public Type LogType
-        => wrapped.LogType;
+    public Type WrappedLogType
+        => wrapped.WrappedLogType;
     /// <inheritdoc/>
     public string Name
         => wrapped.Name;
@@ -27,7 +27,7 @@ public sealed class PointsLogger<TDice> : IRule<TDice>
     /// <param name="logger">The logger used throughout this application.</param>
     public PointsLogger(IRule<TDice> wrapped, ILogger logger)
     {
-        this.logger = logger.ForType(wrapped.LogType);
+        this.logger = logger.ForType(wrapped.WrappedLogType);
         this.wrapped = wrapped;
     }
     /// <inheritdoc/>
@@ -38,7 +38,6 @@ public sealed class PointsLogger<TDice> : IRule<TDice>
         return points;
     }
 }
-// TODO: Find smoother way to write wrappings.
 /// <summary>
 /// Wraps an <see cref="IRule{TDice}"/> in <see cref="Decorators.PointsLogger{TDice}"/>.
 /// </summary>

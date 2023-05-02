@@ -26,7 +26,7 @@ public class HashCounterTests
             .SetupSet(counter => counter[It.IsAny<string>()] = It.IsAny<int>())
             .Callback((string _, int initialValue) => actual = initialValue);
         systemUnderTest.Count(It.IsAny<string>());
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
     [Fact]
@@ -45,7 +45,7 @@ public class HashCounterTests
             .SetupSet(counter => counter[It.IsAny<string>()] = It.IsAny<int>())
             .Callback((string _, int incrementedCount) => actual = incrementedCount);
         systemUnderTest.Count(It.IsAny<string>());
-        output.WriteResult(expected, actual);
+        output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
 }

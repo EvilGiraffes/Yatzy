@@ -8,3 +8,4 @@ global using Xunit;
 global using Xunit.Abstractions;
 
 global using Yatzy.Tests.Utils;
+global using Yatzy.Tests.Writing;

@@ -4,7 +4,7 @@ using Yatzy.Counting.Counters;
 using Yatzy.Dices;
 using Yatzy.Extentions;
 using Yatzy.Logging;
-using Yatzy.PointsCalculators;
+using Yatzy.Rules.PointsCalculators;
 using Yatzy.Rules.Strategies.Splicing;
 
 namespace Yatzy.Rules;
@@ -19,9 +19,6 @@ namespace Yatzy.Rules;
 public sealed class TwoSplicedRule<TDice> : IRule<TDice>
     where TDice : IDice
 {
-    /// <inheritdoc/>
-    public Type LogType
-        => typeof(TwoSplicedRule<TDice>);
     /// <inheritdoc/>
     public string Name { get; }
     readonly ILogger logger;
