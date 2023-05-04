@@ -5,6 +5,7 @@ using Yatzy.Rules;
 using Yatzy.Rules.PointsCalculators;
 using Yatzy.Rules.Strategies.Splicing;
 using Yatzy.Tests.Core.FluentAssertionExt;
+using Yatzy.Tests.Core.RuleTests.Helpers;
 
 namespace Yatzy.Tests.Core.RuleTests;
 public class TwoSplicedRuleTests

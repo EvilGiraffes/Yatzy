@@ -45,7 +45,11 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
     public XOfAKind(ILogger logger, int x, XTransform xTransform, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory)
     {
         ILogger constructorLogger = logger.ForType<XOfAKind<TDice>>();
-        VerifyX(constructorLogger, x);
+        VerifyX(
+            x,
+            x => constructorLogger.Error(
+            "Construction failed. The count is out of range. The count given is {Count}, the range it is expected to be within is {MinimumCount}-{MaximumCount}",
+            x, MinimumCount, MaximumCount));
         this.x = x;
         this.pointsCalculator = pointsCalculator;
         this.counterFactory = counterFactory;
@@ -57,20 +61,20 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
         Points result = Points.Empty;
         ICounter<int> counter = counterFactory();
         counter.Count(hand.Select(dice => dice.Face));
-        foreach ((int item, _) in counter.FilterByAmount(amount => amount >= x))
+        foreach (int item in counter
+            .FilterByAmount(amount => amount >= x)
+            .Select(count => count.Item))
         {
             Points recieved = pointsCalculator.Calculate(item) * x;
             result = Points.Max(result, recieved);
         }
         return result;
     }
-    static void VerifyX(ILogger logger, int x)
+    static void VerifyX(int x, Action<int> failCallback)
     {
         if (x is not < MinimumCount and not > MaximumCount)
             return;
-        logger.Error(
-            "Construction failed. The count is out of range. The count given is {Count}, the range it is expected to be within is {MinimumCount}-{MaximumCount}",
-            x, MinimumCount, MaximumCount);
+        failCallback(x);
         throw new XOfAKindOutOfRange()
         {
             Given = x,

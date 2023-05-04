@@ -5,11 +5,11 @@ using Yatzy.Errors;
 using Yatzy.Rules;
 using Yatzy.Rules.PointsCalculators;
 using Yatzy.Tests.Core.FluentAssertionExt;
+using Yatzy.Tests.Core.RuleTests.Helpers;
 
-using static Yatzy.Tests.Core.RuleTests.RuleHelper;
+using static Yatzy.Tests.Core.RuleTests.Helpers.RuleHelper;
 
 namespace Yatzy.Tests.Core.RuleTests;
-// TODO: Finish.
 public class XOfAKindTests
 {
     readonly ITestOutputHelper output;
@@ -18,6 +18,8 @@ public class XOfAKindTests
     readonly Mock<ICounter<int>> counterMock;
     readonly Mock<IDice> diceMock;
     readonly CounterFactory<int> counterFactory;
+    const int MinimumCount = XOfAKind<IDice>.MinimumCount;
+    const int MaximumCount = XOfAKind<IDice>.MaximumCount;
     public XOfAKindTests(ITestOutputHelper output)
     {
         this.output = output;
@@ -28,8 +30,8 @@ public class XOfAKindTests
         counterFactory = () => counterMock.Object;
     }
     [Theory]
-    [InlineData(XOfAKind<IDice>.MinimumCount)]
-    [InlineData(XOfAKind<IDice>.MaximumCount)]
+    [InlineData(MinimumCount)]
+    [InlineData(MaximumCount)]
     public void Ctor_InRange_NoException(int x)
     {
         Action act = () => _ = CreateRule(x);
@@ -39,7 +41,7 @@ public class XOfAKindTests
     [Fact]
     public void Ctor_OutOfRange_ThrowsException()
     {
-        int x = XOfAKind<IDice>.MinimumCount - 1;
+        int x = MinimumCount - 1;
         Action act = () => _ = CreateRule(x);
         output.Write().Expecting(act).ToThrow<XOfAKindOutOfRange>();
         act.Should().Throw<XOfAKindOutOfRange>();
@@ -65,22 +67,34 @@ public class XOfAKindTests
             new(2, 2),
             new(3, 2)
         };
-        counterMock
-            .Setup(counter => counter.GetEnumerator())
-            .Returns(hand.GetEnumerator());
+        hand.SetAsEnumeratorFor(counterMock);
         Points actual = rule.CalculatePoints(AnyHand);
         output.Write().Expecting(actual).ToBeEmpty();
         actual.Should().BeEmpty();
     }
-    [Fact]
-    public void CalculatePoints_ValidHand_CalcultesPoints()
+    [Theory]
+    [InlineData(MinimumCount, 1)]
+    [InlineData(MaximumCount, 1)]
+    [InlineData(MinimumCount, int.MaxValue / 2)]
+    [InlineData(MaximumCount / 2, 2)]
+    public void CalculatePoints_ValidHand_CalculatesPoints(int x, int face)
     {
-        // TODO: Complete.
+        Points expected = face * x;
+        XOfAKind<IDice> rule = CreateRule(x);
+        List<Count<int>> hand = new()
+        {
+            new(face, x)
+        };
+        hand.SetAsEnumeratorFor(counterMock);
+        pointsCalculatorMock.CalculationReturnsFace();
+        Points actual = rule.CalculatePoints(AnyHand);
+        output.Write().Expecting(actual).ToBe(expected);
+        actual.Should().Be(expected);
     }
     string SimpleTransform(int x)
         => x.ToString();
-    XOfAKind<IDice> CreateRule(XOfAKind<IDice>.XTransform transform, int x = XOfAKind<IDice>.MinimumCount)
+    XOfAKind<IDice> CreateRule(XOfAKind<IDice>.XTransform transform, int x = MinimumCount)
         => new(loggerMock.Object, x, transform, pointsCalculatorMock.Object, counterFactory);
-    XOfAKind<IDice> CreateRule(int x = XOfAKind<IDice>.MinimumCount)
+    XOfAKind<IDice> CreateRule(int x = MinimumCount)
         => CreateRule(SimpleTransform, x);
 }
