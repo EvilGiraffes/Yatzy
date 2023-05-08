@@ -7,6 +7,7 @@ using Yatzy.Logging;
 using Yatzy.Rules.PointsCalculators;
 
 namespace Yatzy.Rules;
+// TODO: Builder.
 /// <summary>
 /// Represents an <see cref="IRule{TDice}"/> where there is an X amount of kind.
 /// </summary>

@@ -1,4 +1,6 @@
-﻿using Serilog;
+﻿using System.Text;
+
+using Serilog;
 
 using Yatzy.Counting.Counters;
 using Yatzy.Dices;
@@ -8,7 +10,6 @@ using Yatzy.Rules.PointsCalculators;
 using Yatzy.Rules.Strategies.Splicing;
 
 namespace Yatzy.Rules;
-// TESTME: Needs testing.
 /// <summary>
 /// Represents a rule that has two splices.
 /// </summary>
@@ -24,7 +25,7 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
     readonly ILogger logger;
     readonly ISpliceStrategy splicer;
     readonly IPointsCalculator pointsCalculator;
-    readonly Func<ICounter<int>> counterFactory;
+    readonly CounterFactory<int> counterFactory;
     readonly record struct Faces(int Max, int Min);
     /// <summary>
     /// Constructs a new instance of <see cref="TwoSplicedRule{TDice}"/>.
@@ -34,7 +35,7 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
     /// <param name="splicer">The splicing strategy to use in this rule.</param>
     /// <param name="pointsCalculator">The calculator defined to calculate the points.</param>
     /// <param name="counterFactory">A factory to create counters.</param>
-    public TwoSplicedRule(ILogger logger, string identifier, ISpliceStrategy splicer, IPointsCalculator pointsCalculator, Func<ICounter<int>> counterFactory)
+    internal TwoSplicedRule(ILogger logger, string identifier, ISpliceStrategy splicer, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory)
     {
         this.logger = logger.ForType<TwoSplicedRule<TDice>>();
         Name = identifier;
@@ -53,6 +54,17 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
         Faces faces = GetMaxAndMinFace(counter, bounds);
         return HandlePoints(faces, bounds);
     }
+    /// <summary>
+    /// Gets the builder to create an instance <see cref="TwoSplicedRule{TDice}"/>.
+    /// </summary>
+    /// <param name="logger">
+    /// <inheritdoc 
+    /// cref="TwoSplicedRule(ILogger, string, ISpliceStrategy, IPointsCalculator, CounterFactory{int})" 
+    /// path="/param[@name='logger']"/>
+    /// </param>
+    /// <returns>A new <see cref="TwoSplicedRuleBuilder{TDice}"/>.</returns>
+    public static TwoSplicedRuleBuilder<TDice> Builder(ILogger logger)
+        => new(logger);
     Faces GetMaxAndMinFace(ICounter<int> counter, Bounds bounds)
     {
         int maxHigherBound = int.MinValue;
@@ -69,9 +81,13 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
             maxLowerBound = Math.Max(maxHigherBound, maxLowerBound);
             maxHigherBound = face;
         }
-        logger.Debug(
-            "Calculated the max and min face from {Counter}. From the bound found the maximum face for the {MaxBound} count to be {MaxCount}, and from the minimum face for the {MinBound} count to be {MinCount}.",
-            counter, bounds.High, maxHigherBound, bounds.Low, maxLowerBound);
+        StringBuilder builder = new();
+        builder
+            .Append("Calculated the max and min face from {Counter}. ")
+            .Append("From the bound found the maximum face for the {MaxBound} count to be {MaxCount}, ")
+            .Append("and from the minimum face for the {MinBound} count to be {MinCount}.")
+            .ToString(
+            template => logger.Debug(template, counter, bounds.High, maxHigherBound, bounds.Low, maxLowerBound));
         return new(maxHigherBound, maxLowerBound);
     }
     Points HandlePoints(Faces faces, Bounds bounds)

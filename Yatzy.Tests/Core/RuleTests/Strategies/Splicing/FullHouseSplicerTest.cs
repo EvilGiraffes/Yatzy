@@ -1,12 +1,12 @@
 ﻿using Yatzy.Rules.Strategies.Splicing;
 
 namespace Yatzy.Tests.Core.RuleTests.Strategies.Splicing;
-public class FullHouseTest
+public class FullHouseSplicerTest
 {
     readonly ITestOutputHelper output;
     readonly Mock<ILogger> loggerMock;
-    readonly FullHouse systemUnderTest;
-    public FullHouseTest(ITestOutputHelper output)
+    readonly FullHouseSplicer systemUnderTest;
+    public FullHouseSplicerTest(ITestOutputHelper output)
     {
         this.output = output;
         loggerMock = MockHelper.GetLogger();

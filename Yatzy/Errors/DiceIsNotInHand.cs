@@ -6,6 +6,7 @@ using Serilog;
 using Yatzy.Dices;
 
 namespace Yatzy.Errors;
+// TESTME: Test message is correct.
 /// <summary>
 /// Represents an exception thrown when the wanted value was not found in the hand.
 /// </summary>
@@ -22,7 +23,17 @@ public class DiceIsNotInHand<TDice> : Exception
     public IList<TDice> Hand { get; init; } = Array.Empty<TDice>();
     /// <inheritdoc/>
     public override string Message
-        => BuildMessage();
+    {
+        get
+        {
+            StringBuilder builder = new();
+            builder
+                .Append(base.Message)
+                .Append($" Value is defined as {Dice}.")
+                .Append($" Hand is {JsonSerializer.Serialize(Hand)}.");
+            return builder.ToString();
+        }
+    }
     /// <inheritdoc cref="Exception()"/>
     public DiceIsNotInHand()
     {
@@ -55,16 +66,5 @@ public class DiceIsNotInHand<TDice> : Exception
             Dice = dice,
             Hand = hand
         };
-    }
-
-    string BuildMessage()
-    {
-        StringBuilder builder = new();
-        builder
-            .AppendLine(base.Message)
-            .AppendLine($"Value is defined as {Dice}.")
-            .AppendLine($"Hand is {JsonSerializer.Serialize(Hand)}.");
-        return builder.ToString();
-
     }
 }

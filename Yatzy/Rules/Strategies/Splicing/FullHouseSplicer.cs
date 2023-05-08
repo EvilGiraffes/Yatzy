@@ -9,13 +9,13 @@ namespace Yatzy.Rules.Strategies.Splicing;
 /// <remarks>
 /// A full house favors splice in the middle or splice left side being smaller if uneven.
 /// </remarks>
-public sealed class FullHouse : SpliceTemplate
+public sealed class FullHouseSplicer : SpliceTemplate
 {
     /// <summary>.
-    /// Creates a new instance of <see cref="FullHouse"/>
+    /// Creates a new instance of <see cref="FullHouseSplicer"/>
     /// </summary>
     /// <param name="logger"><inheritdoc cref="SpliceTemplate(ILogger)" path="/param[@name='logger']"/></param>
-    public FullHouse(ILogger logger) : base(logger.ForType<FullHouse>())
+    public FullHouseSplicer(ILogger logger) : base(logger.ForType<FullHouseSplicer>())
     {
     }
     /// <inheritdoc/>
