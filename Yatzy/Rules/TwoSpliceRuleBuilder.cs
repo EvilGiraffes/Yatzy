@@ -1,10 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Serilog;
+﻿using Serilog;
 
 using Yatzy.Counting.Counters;
 using Yatzy.Dices;
-using Yatzy.Errors;
 using Yatzy.Logging;
 using Yatzy.Rules.PointsCalculators;
 using Yatzy.Rules.Strategies.Splicing;
@@ -23,18 +20,17 @@ namespace Yatzy.Rules;
 /// <see cref="CounterFactory(CounterFactory{int})"/>
 /// </para>
 /// <para>
-/// After you have set everything you will need to call <see cref="Build"/>.
+/// After you have set everything you will need to call <see cref="BuilderTemplate{TBuilding}.Build"/>.
 /// </para>
 /// </remarks>
-public sealed class TwoSplicedRuleBuilder<TDice> : IBuilder<TwoSplicedRule<TDice>>
+public sealed class TwoSplicedRuleBuilder<TDice> : BuilderTemplate<TwoSplicedRule<TDice>>
     where TDice : IDice
 {
-    string? identifier = null;
-    ISpliceStrategy? splicer = null;
-    IPointsCalculator? pointsCalculator = null;
-    CounterFactory<int>? counterFactory = null;
-    readonly ILogger buildLogger;
-    readonly ILogger internalLogger;
+    string identifier = default!;
+    ISpliceStrategy splicer = default!;
+    IPointsCalculator pointsCalculator = default!;
+    CounterFactory<int> counterFactory = default!;
+    readonly ILogger logger;
     /// <summary>
     /// Constructs a new <see cref="TwoSplicedRuleBuilder{TDice}"/>.
     /// </summary>
@@ -43,9 +39,9 @@ public sealed class TwoSplicedRuleBuilder<TDice> : IBuilder<TwoSplicedRule<TDice
     /// </remarks>
     /// <param name="logger">The logger used throughout this application.</param>
     public TwoSplicedRuleBuilder(ILogger logger)
+        : base(logger.ForType<TwoSplicedRuleBuilder<TDice>>())
     {
-        buildLogger = logger;
-        internalLogger = logger.ForType<TwoSplicedRuleBuilder<TDice>>();
+        this.logger = logger;
     }
     /// <summary>
     /// Sets the identifier to be used for the instance to be created.
@@ -104,39 +100,14 @@ public sealed class TwoSplicedRuleBuilder<TDice> : IBuilder<TwoSplicedRule<TDice
         return this;
     }
     /// <inheritdoc/>
-    public TwoSplicedRule<TDice> Build()
+    protected override IEnumerable<Member> RequiredMemberObjects()
     {
-        if (AnyNull())
-        {
-            IEnumerable<string> nullParams = IdentifyNullValues();
-            internalLogger.Error("The build has failed. The following parameters has not been overwritten: {NullParams}", nullParams);
-            throw new BuildingContainedNullParameters
-            {
-                Parameters = nullParams
-            };
-        }
-        return new TwoSplicedRule<TDice>(buildLogger, identifier, splicer, pointsCalculator, counterFactory);
+        yield return new(identifier);
+        yield return new(splicer);
+        yield return new(pointsCalculator);
+        yield return new(counterFactory);
     }
-    [MemberNotNullWhen(
-        false,
-        nameof(identifier),
-        nameof(splicer),
-        nameof(pointsCalculator),
-        nameof(counterFactory))]
-    bool AnyNull()
-        => identifier is null
-        || splicer is null
-        || pointsCalculator is null
-        || counterFactory is null;
-    IEnumerable<string> IdentifyNullValues()
-    {
-        if (identifier is null)
-            yield return nameof(identifier);
-        if (splicer is null)
-            yield return nameof(splicer);
-        if (pointsCalculator is null)
-            yield return nameof(pointsCalculator);
-        if (counterFactory is null)
-            yield return nameof(counterFactory);
-    }
+    /// <inheritdoc/>
+    protected override TwoSplicedRule<TDice> Create()
+        => new(logger, identifier, splicer, pointsCalculator, counterFactory);
 }

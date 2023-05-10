@@ -43,7 +43,7 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
     /// <param name="pointsCalculator">The strategy to calculate the points based on.</param>
     /// <exception cref="XOfAKindOutOfRange">Throw when the count is in the incorrect range.</exception>
     /// <param name="counterFactory">The factory to create a counter.</param>
-    public XOfAKind(ILogger logger, int x, XTransform xTransform, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory)
+    internal XOfAKind(ILogger logger, int x, XTransform xTransform, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory)
     {
         ILogger constructorLogger = logger.ForType<XOfAKind<TDice>>();
         VerifyX(
@@ -71,6 +71,13 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
         }
         return result;
     }
+    /// <summary>
+    /// Gets the builder to create an instance <see cref="XOfAKind{TDice}"/>.
+    /// </summary>
+    /// <param name="logger"><inheritdoc cref="XOfAKind(ILogger, int, XTransform, IPointsCalculator, CounterFactory{int})" path="/param[@name='logger']"/></param>
+    /// <returns>A new instance of <see cref="XOfAKindBuilder{TDice}"/> to create an instance of <see cref="XOfAKind{TDice}"/>.</returns>
+    public static XOfAKindBuilder<TDice> Builder(ILogger logger)
+        => new(logger);
     static void VerifyX(int x, Action<int> failCallback)
     {
         if (x is not < MinimumCount and not > MaximumCount)
