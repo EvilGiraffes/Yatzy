@@ -1,5 +1,4 @@
 ﻿namespace Yatzy.Counting.Counters;
-// TODO: Use this in various places.
 /// <summary>
 /// Represents a factory to get a counter.
 /// </summary>

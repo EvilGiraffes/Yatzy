@@ -13,7 +13,7 @@ namespace Yatzy.Rules;
 /// <para>
 /// Required methods to set parameters: <br/>
 /// <see cref="X"/> <br/>
-/// <see cref="XTransform(XOfAKind{TDice}.XTransform)"/> <br/>
+/// <see cref="XTransform(StringTransform{int})"/> <br/>
 /// <see cref="PointsCalculator(IPointsCalculator)"/> <br/>
 /// <see cref="CounterFactory(CounterFactory{int})"/>
 /// </para>
@@ -26,7 +26,7 @@ public sealed class XOfAKindBuilder<TDice> : BuilderTemplate<XOfAKind<TDice>>
     where TDice : IDice
 {
     int x;
-    XOfAKind<TDice>.XTransform xTransform = default!;
+    StringTransform<int> xTransform = default!;
     IPointsCalculator pointsCalculator = default!;
     CounterFactory<int> counterFactory = default!;
     readonly ILogger logger;
@@ -44,7 +44,7 @@ public sealed class XOfAKindBuilder<TDice> : BuilderTemplate<XOfAKind<TDice>>
     /// </summary>
     /// <param name="x">
     /// <inheritdoc
-    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, XOfAKind{TDice}.XTransform, IPointsCalculator, CounterFactory{int})"
+    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
     /// path="/param[@name='x']"/>
     /// </param>
     /// <returns><see langword="this"/> for further building.</returns>
@@ -58,11 +58,11 @@ public sealed class XOfAKindBuilder<TDice> : BuilderTemplate<XOfAKind<TDice>>
     /// </summary>
     /// <param name="xTransform">
     ///  <inheritdoc
-    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, XOfAKind{TDice}.XTransform, IPointsCalculator, CounterFactory{int})"
+    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
     /// path="/param[@name='xTransform']"/>
     /// </param>
     /// <returns><inheritdoc cref="X" path="/returns"/></returns>
-    public XOfAKindBuilder<TDice> XTransform(XOfAKind<TDice>.XTransform xTransform)
+    public XOfAKindBuilder<TDice> XTransform(StringTransform<int> xTransform)
     {
         this.xTransform = xTransform;
         return this;
@@ -72,7 +72,7 @@ public sealed class XOfAKindBuilder<TDice> : BuilderTemplate<XOfAKind<TDice>>
     /// </summary>
     /// <param name="pointsCalculator">
     ///  <inheritdoc
-    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, XOfAKind{TDice}.XTransform, IPointsCalculator, CounterFactory{int})"
+    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
     /// path="/param[@name='pointsCalculator']"/>
     /// </param>
     /// <returns><inheritdoc cref="X" path="/returns"/></returns>
@@ -86,7 +86,7 @@ public sealed class XOfAKindBuilder<TDice> : BuilderTemplate<XOfAKind<TDice>>
     /// </summary>
     /// <param name="counterFactory">
     ///  <inheritdoc
-    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, XOfAKind{TDice}.XTransform, IPointsCalculator, CounterFactory{int})"
+    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
     /// path="/param[@name='counterFactory']"/>
     /// </param>
     /// <returns><inheritdoc cref="X" path="/returns"/></returns>

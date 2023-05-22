@@ -93,7 +93,7 @@ public class XOfAKindTests
     }
     string SimpleTransform(int x)
         => x.ToString();
-    XOfAKind<IDice> CreateRule(XOfAKind<IDice>.XTransform transform, int x = MinimumCount)
+    XOfAKind<IDice> CreateRule(StringTransform<int> transform, int x = MinimumCount)
         => new(loggerMock.Object, x, transform, pointsCalculatorMock.Object, counterFactory);
     XOfAKind<IDice> CreateRule(int x = MinimumCount)
         => CreateRule(SimpleTransform, x);

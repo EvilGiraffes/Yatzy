@@ -17,16 +17,16 @@ public sealed class XOfAKindFactory<TDice> : IRuleFactory<TDice>
     /// </summary>
     /// <param name="x">
     /// <inheritdoc 
-    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, XOfAKind{TDice}.XTransform, IPointsCalculator, CounterFactory{int})"
+    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
     /// path="/param[@name='x']"/>
     /// </param>
     /// <returns>A new <see cref="XOfAKindFactory{TDice}"/>.</returns>
     public delegate XOfAKindFactory<TDice> PartialFactory(int x);
     readonly int x;
     readonly IPointsCalculator pointsCalculator;
-    readonly XOfAKind<TDice>.XTransform xTransform;
+    readonly StringTransform<int> xTransform;
     readonly CounterFactory<int> counterFactory;
-    XOfAKindFactory(int x, IPointsCalculator pointsCalculator, XOfAKind<TDice>.XTransform xTransform, CounterFactory<int> counterFactory)
+    XOfAKindFactory(int x, IPointsCalculator pointsCalculator, StringTransform<int> xTransform, CounterFactory<int> counterFactory)
     {
         this.x = x;
         this.pointsCalculator = pointsCalculator;
@@ -46,20 +46,20 @@ public sealed class XOfAKindFactory<TDice> : IRuleFactory<TDice>
     /// </summary>
     /// <param name="pointsCalculator">
     /// <inheritdoc 
-    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, XOfAKind{TDice}.XTransform, IPointsCalculator, CounterFactory{int})"
+    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
     /// path="/param[@name='pointsCalculator']"/>
     /// </param>
     /// <param name="xTransform">
     /// <inheritdoc 
-    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, XOfAKind{TDice}.XTransform, IPointsCalculator, CounterFactory{int})"
+    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
     /// path="/param[@name='xTransform']"/>
     /// </param>
     /// <param name="counterFactory">
     /// <inheritdoc 
-    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, XOfAKind{TDice}.XTransform, IPointsCalculator, CounterFactory{int})"
+    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
     /// path="/param[@name='counterFactory']"/>
     /// </param>
     /// <returns>A new <see cref="PartialFactory"/>.</returns>
-    public static PartialFactory Partial(IPointsCalculator pointsCalculator, XOfAKind<TDice>.XTransform xTransform, CounterFactory<int> counterFactory)
+    public static PartialFactory Partial(IPointsCalculator pointsCalculator, StringTransform<int> xTransform, CounterFactory<int> counterFactory)
         => x => new(x, pointsCalculator, xTransform, counterFactory);
 }

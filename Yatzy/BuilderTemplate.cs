@@ -16,7 +16,7 @@ public abstract class BuilderTemplate<TBuilding> : IBuilder<TBuilding>
     /// <summary>
     /// Creates a new <see cref="BuilderTemplate{TBuilding}"/>.
     /// </summary>
-    /// <param name="logger">The logger used throughout this application. Does not call <see cref="LogForContextExt.ForType{T}(ILogger)"/>.</param>
+    /// <param name="logger">The logger used throughout this application. Does not call <see cref="TypeContext.ForType{T}(ILogger)"/>.</param>
     protected BuilderTemplate(ILogger logger)
     {
         this.logger = logger;

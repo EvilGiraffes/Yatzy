@@ -3,6 +3,7 @@
 using Yatzy.Counting.Counters;
 using Yatzy.Dices;
 using Yatzy.Errors;
+using Yatzy.Extentions;
 using Yatzy.Logging;
 using Yatzy.Rules.PointsCalculators;
 
@@ -25,12 +26,6 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
     /// The absolute inclusive maximum count allowed.
     /// </summary>
     public const int MaximumCount = int.MaxValue;
-    /// <summary>
-    /// Transforms X into a <see cref="string"/> representation.
-    /// </summary>
-    /// <param name="x">The integrer to transform.</param>
-    /// <returns>A new <see cref="string"/> representing <paramref name="x"/></returns>
-    public delegate string XTransform(int x);
     readonly IPointsCalculator pointsCalculator;
     readonly CounterFactory<int> counterFactory;
     readonly int x;
@@ -43,12 +38,12 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
     /// <param name="pointsCalculator">The strategy to calculate the points based on.</param>
     /// <exception cref="XOfAKindOutOfRange">Throw when the count is in the incorrect range.</exception>
     /// <param name="counterFactory">The factory to create a counter.</param>
-    internal XOfAKind(ILogger logger, int x, XTransform xTransform, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory)
+    internal XOfAKind(ILogger logger, int x, StringTransform<int> xTransform, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory)
     {
         ILogger constructorLogger = logger.ForType<XOfAKind<TDice>>();
         VerifyX(
             x,
-            x => constructorLogger.Error(
+            () => constructorLogger.Error(
             "Construction failed. The count is out of range. The count given is {Count}, the range it is expected to be within is {MinimumCount}-{MaximumCount}",
             x, MinimumCount, MaximumCount));
         this.x = x;
@@ -74,20 +69,20 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
     /// <summary>
     /// Gets the builder to create an instance <see cref="XOfAKind{TDice}"/>.
     /// </summary>
-    /// <param name="logger"><inheritdoc cref="XOfAKind(ILogger, int, XTransform, IPointsCalculator, CounterFactory{int})" path="/param[@name='logger']"/></param>
+    /// <param name="logger"><inheritdoc cref="XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})" path="/param[@name='logger']"/></param>
     /// <returns>A new instance of <see cref="XOfAKindBuilder{TDice}"/> to create an instance of <see cref="XOfAKind{TDice}"/>.</returns>
     public static XOfAKindBuilder<TDice> Builder(ILogger logger)
         => new(logger);
-    static void VerifyX(int x, Action<int> failCallback)
+    static void VerifyX(int x, Action failCallback)
     {
-        if (x is not < MinimumCount and not > MaximumCount)
-            return;
-        failCallback(x);
-        throw new XOfAKindOutOfRange()
-        {
-            Given = x,
-            Minimum = MinimumCount,
-            Maximum = MaximumCount
-        };
+        x.ThrowIfNot(
+            x => x.InRange(MinimumCount, MaximumCount),
+            () => new XOfAKindOutOfRange
+            {
+                Given = x,
+                Minimum = MinimumCount,
+                Maximum = MaximumCount
+            },
+            failCallback);
     }
 }

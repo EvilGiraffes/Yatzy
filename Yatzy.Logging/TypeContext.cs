@@ -2,9 +2,10 @@
 
 namespace Yatzy.Logging;
 /// <summary>
-/// Extention methods for logging.
+/// Extention methods which handles type context.
 /// </summary>
-public static class LogForContextExt
+/// <remarks>The internal representation by default is "Type".</remarks>
+public static class TypeContext
 {
     /// <summary>
     /// Gives the logger a type context. The context is represented as "Type".

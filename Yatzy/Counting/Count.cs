@@ -38,4 +38,10 @@ public readonly struct Count<T>
         item = Item;
         amount = Amount;
     }
+    /// <summary>
+    /// Creates a <see cref="Count{T}"/> from a <see cref="KeyValuePair{TKey, TValue}"/>.
+    /// </summary>
+    /// <param name="pair">The <see cref="KeyValuePair{TKey, TValue}"/> to convert from.</param>
+    public static implicit operator Count<T>(KeyValuePair<T, int> pair)
+        => new(pair.Key, pair.Value);
 }
