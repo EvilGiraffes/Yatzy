@@ -5,15 +5,17 @@ using Yatzy.Tests.Core.FluentAssertionExt;
 using Yatzy.Tests.Core.RuleTests.Helpers;
 
 namespace Yatzy.Tests.Core.RuleTests;
-public class SameValueRulesTests
+public class SameValueRuleTests
 {
     readonly ITestOutputHelper output;
+    readonly ILogger logger;
     readonly Mock<IDice> diceMock;
     readonly Mock<IPointsCalculator> pointsCalculatorMock;
-    const string Identifier = nameof(SameValueRulesTests);
-    public SameValueRulesTests(ITestOutputHelper output)
+    const string Identifier = nameof(SameValueRuleTests);
+    public SameValueRuleTests(ITestOutputHelper output)
     {
         this.output = output;
+        logger = LoggerHelper.GetTestOutputLogger<SameValueRuleTests>(output);
         diceMock = new();
         pointsCalculatorMock = new();
     }
@@ -75,6 +77,6 @@ public class SameValueRulesTests
     SameValueRule<IDice> BuildRule(int face, int pointsPerValue)
     {
         pointsCalculatorMock.Setup(calculator => calculator.Calculate(It.IsAny<int>())).Returns(pointsPerValue);
-        return new(Identifier, face, pointsCalculatorMock.Object);
+        return new(logger, Identifier, face, pointsCalculatorMock.Object);
     }
 }

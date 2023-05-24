@@ -8,7 +8,6 @@ namespace Yatzy.Tests.Core.RuleTests;
 public class YatzyRuleTests
 {
     readonly ITestOutputHelper output;
-    readonly Mock<ILogger> loggerMock;
     readonly Mock<IDice> diceMock;
     readonly IPointsCalculator pointsCalculator;
     readonly Points fixedPoints;
@@ -16,11 +15,11 @@ public class YatzyRuleTests
     public YatzyRuleTests(ITestOutputHelper output)
     {
         this.output = output;
-        loggerMock = MockHelper.GetLogger();
+        ILogger logger = LoggerHelper.GetTestOutputLogger<YatzyRuleTests>(output);
         diceMock = new();
         fixedPoints = 10;
         pointsCalculator = new FixedPointsPerValue(fixedPoints);
-        systemUnderTest = new(loggerMock.Object, pointsCalculator);
+        systemUnderTest = new(logger, pointsCalculator);
     }
     [Fact]
     public void CalculatePoints_Yatzy_Points()

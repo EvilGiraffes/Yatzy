@@ -1,4 +1,6 @@
-﻿using Yatzy.Dices;
+﻿using Serilog;
+
+using Yatzy.Dices;
 using Yatzy.Rules.PointsCalculators;
 
 namespace Yatzy.Rules.Factories.SameValueRuleFactories;
@@ -16,8 +18,9 @@ public sealed class Fives<TDice> : SameValueRuleFactory<TDice>
     /// <summary>
     /// Constructs a new instance of <see cref="Fives{TDice}"/>.
     /// </summary>
-    /// <param name="pointsCalculator"><inheritdoc cref="SameValueRuleFactory{TDice}.SameValueRuleFactory(IPointsCalculator)" path="/param[@name='pointsCalculator']"/></param>
-    public Fives(IPointsCalculator? pointsCalculator) : base(pointsCalculator)
+    /// <param name="logger"><inheritdoc cref="SameValueRuleFactory{TDice}.SameValueRuleFactory(ILogger, IPointsCalculator)" path="/param[@name='logger']"/></param>
+    /// <param name="pointsCalculator"><inheritdoc cref="SameValueRuleFactory{TDice}.SameValueRuleFactory(Serilog.ILogger, IPointsCalculator)" path="/param[@name='pointsCalculator']"/></param>
+    public Fives(ILogger logger, IPointsCalculator? pointsCalculator) : base(logger, pointsCalculator)
     {
     }
 }

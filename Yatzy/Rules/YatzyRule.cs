@@ -45,19 +45,23 @@ public sealed class YatzyRule<TDice> : IRule<TDice>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
         if (hand.IsEmpty())
+        {
+            logger.Debug("The hand {Hand} was empty. Can not continue calculation.", hand);
             return Points.Empty;
+        }
         Points sum = Points.Empty;
         int face = hand[0].Face;
         foreach (IDice dice in hand)
         {
             if (dice.Face != face)
             {
-                logger.Debug(
+                logger.Verbose(
                     "The current face {Face} was inequal to the rest of the faces, therefore is not yatzy. Expected face {ExpectedFace}",
                     dice.Face, face);
                 return Points.Empty;
             }
             sum += pointsCalculator.Calculate(face);
+            logger.Verbose("Current sum is {Sum}", sum);
         }
         return sum;
     }

@@ -47,7 +47,10 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
         if (hand.IsEmpty())
+        {
+            logger.Debug("The hand {Hand} was empty. Can not complete the calculation.", hand);
             return Points.Empty;
+        }
         ICounter<int> counter = counterFactory();
         counter.Count(hand.Select(dice => dice.Face));
         Bounds bounds = splicer.Splice(hand.Count);
@@ -71,22 +74,25 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
         int maxLowerBound = int.MinValue;
         foreach ((int face, int count) in counter.FilterByAmount(amount => amount >= bounds.Low))
         {
+            logger.Verbose("Higher bound currently is {MaxHigherBound}. Lower bound currently is {MaxLowerBound}", maxHigherBound, maxLowerBound);
             if (count < bounds.High)
             {
                 maxLowerBound = Math.Max(face, maxLowerBound);
+                logger.Verbose("Lower bound may have changed. Currently {MaxLowerBound}", maxLowerBound);
                 continue;
             }
             if (face < maxHigherBound)
                 continue;
             maxLowerBound = Math.Max(maxHigherBound, maxLowerBound);
             maxHigherBound = face;
+            logger.Verbose("Higher bound has changed. Currently {MaxHigherBound}", maxHigherBound);
         }
         StringBuilder builder = new();
         builder
             .Append("Calculated the max and min face from {Counter}. ")
             .Append("From the bound found the maximum face for the {MaxBound} count to be {MaxCount}, ")
             .Append("and from the minimum face for the {MinBound} count to be {MinCount}.")
-            .ToString(
+            .InsertResult(
             template => logger.Debug(template, counter, bounds.High, maxHigherBound, bounds.Low, maxLowerBound));
         return new(maxHigherBound, maxLowerBound);
     }

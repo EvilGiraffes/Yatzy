@@ -12,7 +12,6 @@ public class TwoSplicedRuleTests
 {
     readonly ITestOutputHelper output;
     readonly Mock<IDice> diceMock;
-    readonly Mock<ILogger> loggerMock;
     readonly Mock<ISpliceStrategy> spliceMock;
     readonly Mock<IPointsCalculator> pointsCalculatorMock;
     readonly Mock<ICounter<int>> counterMock;
@@ -21,12 +20,12 @@ public class TwoSplicedRuleTests
     public TwoSplicedRuleTests(ITestOutputHelper output)
     {
         this.output = output;
+        ILogger logger = LoggerHelper.GetTestOutputLogger<TwoSplicedRuleTests>(output);
         diceMock = new();
-        loggerMock = MockHelper.GetLogger();
         spliceMock = new();
         pointsCalculatorMock = new();
         counterMock = new();
-        systemUnderTest = new(loggerMock.Object, Identifier, spliceMock.Object, pointsCalculatorMock.Object, () => counterMock.Object);
+        systemUnderTest = new(logger, Identifier, spliceMock.Object, pointsCalculatorMock.Object, () => counterMock.Object);
     }
     [Fact]
     public void CalculatePoints_EmptyHand_NoPoints()

@@ -4,13 +4,12 @@ namespace Yatzy.Tests.Core.RuleTests.Strategies.Splicing;
 public class FullHouseSplicerTest
 {
     readonly ITestOutputHelper output;
-    readonly Mock<ILogger> loggerMock;
     readonly FullHouseSplicer systemUnderTest;
     public FullHouseSplicerTest(ITestOutputHelper output)
     {
         this.output = output;
-        loggerMock = MockHelper.GetLogger();
-        systemUnderTest = new(loggerMock.Object);
+        ILogger logger = LoggerHelper.GetTestOutputLogger<FullHouseSplicerTest>(output);
+        systemUnderTest = new(logger);
     }
     [Fact]
     public void Splice_EvenCount_SplicedInMiddle()

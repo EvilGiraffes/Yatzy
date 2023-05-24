@@ -30,9 +30,13 @@ public sealed class FullHouseSplicer : SpliceTemplate
     {
         double splice = context.Splice;
         if (context.IsEven)
+        {
+            Logger.Verbose("The splice was even, it will splice it in half.");
             return new((int) splice, (int) splice);
+        }
         int lowerBound = (int) Math.Floor(splice);
         int higherBound = (int) Math.Ceiling(splice);
+        Logger.Verbose("The splice was uneven, it will lean more heavy towards the lowerbound.");
         return new(lowerBound, higherBound);
     }
 }

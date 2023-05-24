@@ -1,5 +1,6 @@
 ﻿using Serilog;
 
+
 namespace Yatzy.Logging;
 /// <summary>
 /// Extention methods which handles type context.

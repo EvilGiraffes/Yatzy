@@ -4,15 +4,14 @@ namespace Yatzy.Tests.Core.CountingTests.CountersTest;
 public class HashCounterTests
 {
     readonly ITestOutputHelper output;
-    readonly Mock<ILogger> loggerMock;
     readonly Mock<IDictionary<string, int>> counterMock;
     readonly HashCounter<string> systemUnderTest;
     public HashCounterTests(ITestOutputHelper output)
     {
+        ILogger logger = LoggerHelper.GetTestOutputLogger<HashCounterTests>(output);
         this.output = output;
-        loggerMock = MockHelper.GetLogger();
         counterMock = new();
-        systemUnderTest = new(loggerMock.Object, counterMock.Object);
+        systemUnderTest = new(logger, counterMock.Object);
     }
     [Fact]
     public void Count_NewKey_AddsKey()

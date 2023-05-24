@@ -5,10 +5,6 @@
 /// </summary>
 public sealed class LoggingExtentionOptions
 {
-    /// <summary>
-    /// Gets the options to configure <see cref="LogException"/>.
-    /// </summary>
-    public ExceptionOptions Exception { get; } = new();
     internal LoggingExtentionOptions()
     {
     }

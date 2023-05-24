@@ -13,7 +13,7 @@ namespace Yatzy.Tests.Core.RuleTests;
 public class XOfAKindTests
 {
     readonly ITestOutputHelper output;
-    readonly Mock<ILogger> loggerMock;
+    readonly ILogger logger;
     readonly Mock<IPointsCalculator> pointsCalculatorMock;
     readonly Mock<ICounter<int>> counterMock;
     readonly Mock<IDice> diceMock;
@@ -23,7 +23,7 @@ public class XOfAKindTests
     public XOfAKindTests(ITestOutputHelper output)
     {
         this.output = output;
-        loggerMock = MockHelper.GetLogger();
+        logger = LoggerHelper.GetTestOutputLogger<XOfAKindTests>(output);
         pointsCalculatorMock = new();
         counterMock = new();
         diceMock = new();
@@ -35,7 +35,7 @@ public class XOfAKindTests
     public void Ctor_InRange_NoException(int x)
     {
         Action act = () => _ = CreateRule(x);
-        output.Write().Expecting(act).ToThrow<XOfAKindOutOfRange>();
+        output.Write().Expecting(act).ToNotThrowException();
         act.Should().NotThrow<XOfAKindOutOfRange>();
     }
     [Fact]
@@ -94,7 +94,7 @@ public class XOfAKindTests
     string SimpleTransform(int x)
         => x.ToString();
     XOfAKind<IDice> CreateRule(StringTransform<int> transform, int x = MinimumCount)
-        => new(loggerMock.Object, x, transform, pointsCalculatorMock.Object, counterFactory);
+        => new(logger, x, transform, pointsCalculatorMock.Object, counterFactory);
     XOfAKind<IDice> CreateRule(int x = MinimumCount)
         => CreateRule(SimpleTransform, x);
 }

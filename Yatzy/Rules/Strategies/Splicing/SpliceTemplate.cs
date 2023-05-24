@@ -26,13 +26,13 @@ public abstract class SpliceTemplate : ISpliceStrategy
     {
         if (count < MinimumCount)
         {
-            Logger.Error("Count {Count} is below minimum {MinimumCount}", count, MinimumCount);
-            throw new InvalidSpliceOperation($"Count cannot be under {MinimumCount}.");
+            InvalidSpliceOperation exception = new($"Count cannot be under {MinimumCount}.");
+            Logger.Error(exception, "The count {Count} was too low.", count);
+            throw exception;
         }
         SpliceContext splice = DivideCount(count);
-        Bounds result = HandleSplicing(splice);
-        Logger.Debug("Splice was {Result}", result);
-        return result;
+        Logger.Debug("Spliced it at {Splice}.", splice);
+        return HandleSplicing(splice);
     }
     /// <summary>
     /// Divides the count in the favored way.

@@ -1,4 +1,6 @@
-﻿using Yatzy.Dices;
+﻿using Serilog;
+
+using Yatzy.Dices;
 using Yatzy.Rules.PointsCalculators;
 
 namespace Yatzy.Rules.Factories.SameValueRuleFactories;
@@ -16,8 +18,9 @@ public sealed class Aces<TDice> : SameValueRuleFactory<TDice>
     /// <summary>
     /// Constructs a new instance of <see cref="Aces{TDice}"/>.
     /// </summary>
-    /// <param name="pointsCalculator"><inheritdoc cref="SameValueRuleFactory{TDice}.SameValueRuleFactory(IPointsCalculator)" path="/param[@name='pointsCalculator']"/></param>
-    public Aces(IPointsCalculator? pointsCalculator = null) : base(pointsCalculator)
+    /// <param name="logger"><inheritdoc cref="SameValueRuleFactory{TDice}.SameValueRuleFactory(ILogger, IPointsCalculator)" path="/param[@name='logger']"/></param>
+    /// <param name="pointsCalculator"><inheritdoc cref="SameValueRuleFactory{TDice}.SameValueRuleFactory(ILogger, IPointsCalculator)" path="/param[@name='pointsCalculator']"/></param>
+    public Aces(ILogger logger, IPointsCalculator? pointsCalculator = null) : base(logger, pointsCalculator)
     {
     }
 }

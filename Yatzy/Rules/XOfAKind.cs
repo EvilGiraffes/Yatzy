@@ -26,6 +26,7 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
     /// The absolute inclusive maximum count allowed.
     /// </summary>
     public const int MaximumCount = int.MaxValue;
+    readonly ILogger logger;
     readonly IPointsCalculator pointsCalculator;
     readonly CounterFactory<int> counterFactory;
     readonly int x;
@@ -40,12 +41,8 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
     /// <param name="counterFactory">The factory to create a counter.</param>
     internal XOfAKind(ILogger logger, int x, StringTransform<int> xTransform, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory)
     {
-        ILogger constructorLogger = logger.ForType<XOfAKind<TDice>>();
-        VerifyX(
-            x,
-            () => constructorLogger.Error(
-            "Construction failed. The count is out of range. The count given is {Count}, the range it is expected to be within is {MinimumCount}-{MaximumCount}",
-            x, MinimumCount, MaximumCount));
+        this.logger = logger.ForType<XOfAKind<TDice>>();
+        VerifyX(x, error => logger.Error(error, "X's value {X} was not within the correct range.", x));
         this.x = x;
         this.pointsCalculator = pointsCalculator;
         this.counterFactory = counterFactory;
@@ -57,12 +54,13 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
         Points result = Points.Empty;
         ICounter<int> counter = counterFactory();
         counter.Count(hand.Select(dice => dice.Face));
-        foreach (int item in counter
+        foreach (int face in counter
             .FilterByAmount(amount => amount >= x)
             .Select(count => count.Item))
         {
-            Points recieved = pointsCalculator.Calculate(item) * x;
+            Points recieved = pointsCalculator.Calculate(face) * x;
             result = Points.Max(result, recieved);
+            logger.Verbose("Current face is {Face}. The total points being calculated is {Recieved}. Current result is {Result}", face, recieved, result);
         }
         return result;
     }
@@ -73,16 +71,17 @@ public sealed class XOfAKind<TDice> : IRule<TDice>
     /// <returns>A new instance of <see cref="XOfAKindBuilder{TDice}"/> to create an instance of <see cref="XOfAKind{TDice}"/>.</returns>
     public static XOfAKindBuilder<TDice> Builder(ILogger logger)
         => new(logger);
-    static void VerifyX(int x, Action failCallback)
+    static void VerifyX(int x, Action<XOfAKindOutOfRange> failCallback)
     {
-        x.ThrowIfNot(
-            x => x.InRange(MinimumCount, MaximumCount),
-            () => new XOfAKindOutOfRange
-            {
-                Given = x,
-                Minimum = MinimumCount,
-                Maximum = MaximumCount
-            },
-            failCallback);
+        if (x.InRange(MinimumCount, MaximumCount))
+            return;
+        XOfAKindOutOfRange exception = new()
+        {
+            Given = x,
+            Minimum = MinimumCount,
+            Maximum = MaximumCount
+        };
+        failCallback(exception);
+        throw exception;
     }
 }

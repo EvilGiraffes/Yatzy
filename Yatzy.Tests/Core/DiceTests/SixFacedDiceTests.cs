@@ -7,7 +7,6 @@ public class SixFacedDiceTests
 {
     // TODO: Add output.
     readonly Mock<IDiceState> stateMock;
-    readonly Mock<ILogger> loggerMock;
     readonly SixFacedDice systemUnderTest;
     const int PropertyRuns = 10000;
     readonly DiceRange range;
@@ -15,12 +14,12 @@ public class SixFacedDiceTests
         => range.MinimumFace;
     int RangeDifference
         => range.MaximumFace - range.MinimumFace;
-    public SixFacedDiceTests()
+    public SixFacedDiceTests(ITestOutputHelper output)
     {
+        ILogger logger = LoggerHelper.GetTestOutputLogger<SixFacedDiceTests>(output);
         stateMock = new();
-        loggerMock = MockHelper.GetLogger();
         range = SixFacedDice.Range;
-        systemUnderTest = new(loggerMock.Object, stateMock.Object, StartValue);
+        systemUnderTest = new(logger, stateMock.Object, StartValue);
     }
     [Fact]
     public void Roll_PropertyTestFace()

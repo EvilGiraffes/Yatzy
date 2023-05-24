@@ -6,6 +6,9 @@ namespace Yatzy.Errors;
 /// </summary>
 public class XOfAKindOutOfRange : Exception
 {
+    /// <inheritdoc/>
+    public override string Message
+        => $"{base.Message} It is out of range by {Difference()}.";
     /// <summary>
     /// The count given to the class.
     /// </summary>
@@ -29,5 +32,11 @@ public class XOfAKindOutOfRange : Exception
     /// <inheritdoc/>
     public XOfAKindOutOfRange(string message, Exception innerException) : base(message, innerException)
     {
+    }
+    int Difference()
+    {
+        if (Given < Minimum)
+            return Given - Minimum;
+        return Given - Maximum;
     }
 }

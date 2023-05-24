@@ -3,17 +3,17 @@ using Yatzy.Rules;
 using Yatzy.Rules.Decorators;
 
 namespace Yatzy.Tests.Core.RuleTests.Decorators;
-public class EmptyHandLogger
+public class EmptyHandLoggerTests
 {
     readonly ITestOutputHelper output;
     readonly Mock<ILogger> loggerMock;
     readonly Mock<IReadOnlyList<IDice>> handMock;
     readonly Mock<IRule<IDice>> ruleMock;
     readonly EmptyHandLogger<IDice> systemUnderTest;
-    public EmptyHandLogger(ITestOutputHelper output)
+    public EmptyHandLoggerTests(ITestOutputHelper output)
     {
         this.output = output;
-        loggerMock = MockHelper.GetLogger();
+        loggerMock = LoggerHelper.GetLoggerMocked<EmptyHandLoggerTests>(output);
         handMock = new();
         ruleMock = new();
         ruleMock.Setup(rule => rule.WrappedLogType).Returns(ruleMock.Object.GetType());

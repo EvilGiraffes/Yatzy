@@ -19,6 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Yatzy.Extentions\Yatzy.Extentions.csproj" />
 	  <ProjectReference Include="..\Yatzy.Logging\Yatzy.Logging.csproj" />
 	</ItemGroup>
 
