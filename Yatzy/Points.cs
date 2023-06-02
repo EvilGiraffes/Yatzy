@@ -9,62 +9,65 @@ namespace Yatzy;
 public readonly struct Points : IEquatable<Points>, IComparable<Points>
 {
     /// <summary>
-    /// The amount of points that has been given.
-    /// </summary>
-    public int Amount { get; } = MinimumPoints;
-    /// <summary>
     /// Whether there is more than 0 points.
     /// </summary>
     public bool HasPoints
-        => Amount > MinimumPoints;
+        => amount > uint.MinValue;
     /// <summary>
     /// An instance of points where it has not been recieved. Used when you wont give points.
     /// </summary>
-    /// <value>Will always be the same value, which would be the same as passing <see cref="MinimumPoints"/> to the constructor.</value>
-    public static Points Empty { get; } = new(MinimumPoints);
-    /// <summary>
-    /// The absolute maximum amount of points allowed to give.
-    /// </summary>
-    public const int MaximumPoints = int.MaxValue;
-    /// <summary>
-    /// The absolute minimum amount of points that can be in this structure.
-    /// </summary>
-    public const int MinimumPoints = 0;
-    /// <summary>
-    /// Constructs a new instance of points.
-    /// </summary>
-    /// <param name="points">The amount to be given, cannot be under the <see cref="MinimumPoints"/>.</param>
-    /// <exception cref="PointsOutOfRange">Thrown if the value is below <see cref="MinimumPoints"/></exception>
-    public Points(int points) : this()
+    /// <value>Will always be the same value, which would be the same as passing 0 to the constructor.</value>
+    public static Points Empty { get; } = new(uint.MinValue);
+    readonly uint amount;
+    Points(uint points) : this()
     {
-        if (points is < MinimumPoints or > MaximumPoints)
-            throw new PointsOutOfRange
-            {
-                Maximum = MaximumPoints,
-                Minimum = MinimumPoints,
-                Received = points
-            };
-        Amount = points;
+        amount = points;
     }
     /// <inheritdoc/>
     public bool Equals(Points other)
     {
         if (!HasPoints && !other.HasPoints)
             return true;
-        return Amount == other.Amount;
+        return amount == other.amount;
     }
     /// <inheritdoc/>
     public int CompareTo(Points other)
-            => Amount.CompareTo(other.Amount);
+            => amount.CompareTo(other.amount);
     /// <inheritdoc/>
     public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is Points points && Equals(points);
     /// <inheritdoc/>
     public override int GetHashCode()
-        => HasPoints ? Amount ^ Amount >> 32 : MinimumPoints ^ MinimumPoints >> 32;
+    {
+        uint hash = amount ^ amount >> 32;
+        return hash.GetHashCode();
+    }
     /// <inheritdoc/>
     public override string ToString()
-        => HasPoints ? $"{Amount} {nameof(Points)}" : $"No {nameof(Points)}";
+        => HasPoints ? $"{amount} {nameof(Points)}" : $"No {nameof(Points)}";
+    /// <summary>
+    /// Constructs a new instance of points.
+    /// </summary>
+    /// <param name="points">The amount to be given.</param>
+    /// <returns>A new instance of <see cref="Points"/>.</returns>
+    public static Points Create(uint points)
+        => new(points);
+    /// <summary>
+    /// <inheritdoc cref="Create(uint)" path="/summary"/>
+    /// </summary>
+    /// <param name="points"></param>
+    /// <returns><inheritdoc cref="Create(uint)" path="/returns"/></returns>
+    /// <exception cref="PointsOutOfRange">Thrown if the value is below 0.</exception>
+    public static Points Create(int points)
+    {
+        if (points < 0)
+            throw new PointsOutOfRange
+            {
+                Minimum = 0,
+                Received = points
+            };
+        return Create((uint) points);
+    }
     /// <summary>
     /// Gets the max between the points.
     /// </summary>
@@ -78,16 +81,21 @@ public readonly struct Points : IEquatable<Points>, IComparable<Points>
         return left;
     }
     /// <summary>
+    /// Will cast from a <see cref="uint"/> to a new <see cref="Points"/>.
+    /// </summary>
+    /// <param name="points">The value to cast from.</param>
+    public static implicit operator Points(uint points)
+        => Create(points);
+    /// <summary>
     /// Will cast from an <see cref="int"/> to a new <see cref="Points"/>.
     /// </summary>
     /// <param name="points">The value to cast from.</param>
-    /// <exception cref="PointsOutOfRange"><inheritdoc cref="Points(int)" path="/exception"/></exception>
     /// <exception cref="PointsCastException">Thrown if the casting fails.</exception>
     public static implicit operator Points(int points)
     {
         try
         {
-            return new Points(points);
+            return Create(points);
         }
         catch (PointsOutOfRange outOfRange)
         {
@@ -104,7 +112,7 @@ public readonly struct Points : IEquatable<Points>, IComparable<Points>
     /// <param name="right">The right point to add.</param>
     /// <returns>A new point with the new result.</returns>
     public static Points operator +(Points left, Points right)
-        => new(left.Amount + right.Amount);
+        => new(left.amount + right.amount);
     /// <summary>
     /// Multiplies the points together.
     /// </summary>
@@ -112,7 +120,7 @@ public readonly struct Points : IEquatable<Points>, IComparable<Points>
     /// <param name="right">The right point to multiply.</param>
     /// <returns>A new <see cref="Points"/> after being multiplied.</returns>
     public static Points operator *(Points left, Points right)
-        => new(left.Amount * right.Amount);
+        => new(left.amount * right.amount);
     /// <summary>
     /// Checks for the equality of the points.
     /// </summary>

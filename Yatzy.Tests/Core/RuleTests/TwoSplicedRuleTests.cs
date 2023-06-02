@@ -28,14 +28,6 @@ public class TwoSplicedRuleTests
         systemUnderTest = new(logger, Identifier, spliceMock.Object, pointsCalculatorMock.Object, () => counterMock.Object);
     }
     [Fact]
-    public void CalculatePoints_EmptyHand_NoPoints()
-    {
-        IReadOnlyList<IDice> emptyHand = RuleHelper.EmptyHand;
-        Points actual = systemUnderTest.CalculatePoints(emptyHand);
-        output.Write().Expecting(actual).ToBeEmpty();
-        actual.Should().BeEmpty();
-    }
-    [Fact]
     public void CalculatePoints_NoDiceAboveHighCount_NoPoints()
     {
         Bounds bounds = new(2, 3);

@@ -10,6 +10,12 @@ public interface IRule<TDice> : INameable, ILogWrappable
     where TDice : IDice
 {
     /// <summary>
+    /// Checks if the <see cref="CalculatePoints(IReadOnlyList{TDice})"/> is applicable to the current hand.
+    /// </summary>
+    /// <param name="hand">The hand to check if it is applicable.</param>
+    /// <returns><see langword="true"/> if it is applicable, <see langword="false"/> if it is not applicable.</returns>
+    bool IsApplicable(IReadOnlyList<TDice> hand);
+    /// <summary>
     /// Calculates the points for this hand.
     /// </summary>
     /// <param name="hand">Current hand.</param>

@@ -18,8 +18,8 @@ public class XOfAKindTests
     readonly Mock<ICounter<int>> counterMock;
     readonly Mock<IDice> diceMock;
     readonly CounterFactory<int> counterFactory;
-    const int MinimumCount = XOfAKind<IDice>.MinimumCount;
-    const int MaximumCount = XOfAKind<IDice>.MaximumCount;
+    const int MinimumCount = XOfAKind<IDice>.Minimum;
+    const int MaximumCount = XOfAKind<IDice>.Maximum;
     public XOfAKindTests(ITestOutputHelper output)
     {
         this.output = output;
@@ -35,16 +35,14 @@ public class XOfAKindTests
     public void Ctor_InRange_NoException(int x)
     {
         Action act = () => _ = CreateRule(x);
-        output.Write().Expecting(act).ToNotThrowException();
-        act.Should().NotThrow<XOfAKindOutOfRange>();
+        act.Should().NotThrow<XOutOfRange>();
     }
     [Fact]
     public void Ctor_OutOfRange_ThrowsException()
     {
         int x = MinimumCount - 1;
         Action act = () => _ = CreateRule(x);
-        output.Write().Expecting(act).ToThrow<XOfAKindOutOfRange>();
-        act.Should().Throw<XOfAKindOutOfRange>();
+        act.Should().Throw<XOutOfRange>();
     }
     [Fact]
     public void CalculatePoints_EmptyHand_EmptyPoints()

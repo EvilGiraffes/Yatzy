@@ -54,7 +54,10 @@ public sealed class HashCounter<T> : ICounter<T>
         => counter.ContainsKey(key);
     /// <inheritdoc/>
     public void Clear()
-        => counter.Clear();
+    {
+        logger.Debug("Clearing the counter.");
+        counter.Clear();
+    }
     /// <inheritdoc/>
     public IEnumerator<Count<T>> GetEnumerator()
     {

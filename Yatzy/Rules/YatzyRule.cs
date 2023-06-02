@@ -42,13 +42,11 @@ public sealed class YatzyRule<TDice> : IRule<TDice>
         this.pointsCalculator = pointsCalculator;
     }
     /// <inheritdoc/>
+    public bool IsApplicable(IReadOnlyList<TDice> hand)
+        => !hand.IsEmpty();
+    /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
-        if (hand.IsEmpty())
-        {
-            logger.Debug("The hand {Hand} was empty. Can not continue calculation.", hand);
-            return Points.Empty;
-        }
         Points sum = Points.Empty;
         int face = hand[0].Face;
         foreach (IDice dice in hand)
@@ -65,4 +63,5 @@ public sealed class YatzyRule<TDice> : IRule<TDice>
         }
         return sum;
     }
+
 }

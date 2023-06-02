@@ -5,10 +5,6 @@
 public class PointsOutOfRange : Exception
 {
     /// <summary>
-    /// The maximum amount of points that is valid.
-    /// </summary>
-    public int Maximum { get; init; }
-    /// <summary>
     /// The minimum points that is valid.
     /// </summary>
     public int Minimum { get; init; }
@@ -26,8 +22,6 @@ public class PointsOutOfRange : Exception
         {
             if (Received < Minimum)
                 return Received - Minimum;
-            if (Received > Maximum)
-                return Received - Maximum;
             return 0;
         }
     }

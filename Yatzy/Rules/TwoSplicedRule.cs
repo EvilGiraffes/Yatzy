@@ -44,13 +44,11 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
         this.counterFactory = counterFactory;
     }
     /// <inheritdoc/>
+    public bool IsApplicable(IReadOnlyList<TDice> hand)
+        => hand.Count > 1;
+    /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
-        if (hand.IsEmpty())
-        {
-            logger.Debug("The hand {Hand} was empty. Can not complete the calculation.", hand);
-            return Points.Empty;
-        }
         ICounter<int> counter = counterFactory();
         counter.Count(hand.Select(dice => dice.Face));
         Bounds bounds = splicer.Splice(hand.Count);

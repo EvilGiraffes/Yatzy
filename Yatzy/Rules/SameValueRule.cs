@@ -33,10 +33,11 @@ public sealed class SameValueRule<TDice> : IRule<TDice>
         this.pointsCalculator = pointsCalculator;
     }
     /// <inheritdoc/>
+    public bool IsApplicable(IReadOnlyList<TDice> hand)
+        => !hand.IsEmpty();
+    /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyList<TDice> hand)
     {
-        if (hand.IsEmpty())
-            return Points.Empty;
         Points sum = Points.Empty;
         foreach (IDice dice in hand)
         {

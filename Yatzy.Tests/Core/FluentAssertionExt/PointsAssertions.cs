@@ -21,7 +21,7 @@ public sealed class PointsAssertions
         Execute.Assertion
             .BecauseOf(because, becauseArgs)
             .ForCondition(!instance.HasPoints)
-            .FailWith($"The instance of points was not empty. Contained {instance.Amount}.");
+            .FailWith($"The instance of points was not empty. Contained {instance}.");
         return AndConstraint;
     }
     /// <summary>
@@ -36,7 +36,7 @@ public sealed class PointsAssertions
         Execute.Assertion
             .BecauseOf(because, becauseArgs)
             .ForCondition(instance == expected)
-            .FailWith($"The two instances were unequal. The amount in the actual was {instance.Amount}, the amount in the expected was {expected.Amount}");
+            .FailWith($"The two instances were unequal. The amount in the actual was {instance}, the amount in the expected was {expected}");
         return AndConstraint;
     }
 }

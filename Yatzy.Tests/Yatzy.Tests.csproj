@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Yatzy.Logging\Yatzy.Logging.csproj" />
     <ProjectReference Include="..\Yatzy.Runner\Yatzy.Runner.csproj" />
     <ProjectReference Include="..\Yatzy\Yatzy.csproj" />
   </ItemGroup>

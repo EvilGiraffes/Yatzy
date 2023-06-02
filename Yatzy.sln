@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yatzy.Runner", "Yatzy.Runne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yatzy.Logging", "Yatzy.Logging\Yatzy.Logging.csproj", "{2A5583B2-14C2-4471-AD0C-2CE3AF869D20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yatzy.Extentions", "Yatzy.Extentions\Yatzy.Extentions.csproj", "{8CDFEDB8-67D3-4E59-8086-BA43867665F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yatzy.Extentions", "Yatzy.Extentions\Yatzy.Extentions.csproj", "{8CDFEDB8-67D3-4E59-8086-BA43867665F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
