@@ -25,8 +25,8 @@ namespace Yatzy.Rules;
 public sealed class XOfAKindBuilder<TDice> : BuilderTemplate<XOfAKind<TDice>>
     where TDice : IDice
 {
-    int x;
-    StringTransform<int> xTransform = default!;
+    int? x = default;
+    StringTransform<int>? xTransform = default;
     IPointsCalculator pointsCalculator = default!;
     CounterFactory<int> counterFactory = default!;
     readonly ILogger logger;
@@ -98,11 +98,14 @@ public sealed class XOfAKindBuilder<TDice> : BuilderTemplate<XOfAKind<TDice>>
     /// <inheritdoc/>
     protected override IEnumerable<Member> RequiredMemberObjects()
     {
-        yield return new(xTransform);
+        yield return new(x);
         yield return new(pointsCalculator);
         yield return new(counterFactory);
     }
     /// <inheritdoc/>
     protected override XOfAKind<TDice> Create()
-        => new(logger, x, xTransform, pointsCalculator, counterFactory);
+    {
+        xTransform ??= x => x.ToString();
+        return new(logger, (int) x!, xTransform, pointsCalculator, counterFactory);
+    }
 }

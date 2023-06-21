@@ -34,10 +34,4 @@ public readonly struct WrapperContext<TAbstraction>
     {
         Context = context;
     }
-    /// <summary>
-    /// Converts the current type into a wrapper with that type.
-    /// </summary>
-    /// <param name="context">The context to convert from.</param>
-    public static implicit operator WrapperContext<TAbstraction>(TAbstraction context)
-        => new(context);
 }

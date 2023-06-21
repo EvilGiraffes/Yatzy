@@ -19,6 +19,7 @@ public readonly struct Points : IEquatable<Points>, IComparable<Points>
     /// <value>Will always be the same value, which would be the same as passing 0 to the constructor.</value>
     public static Points Empty { get; } = new(uint.MinValue);
     readonly uint amount;
+    const uint HashCombinator = 33763762U;
     Points(uint points) : this()
     {
         amount = points;
@@ -38,10 +39,7 @@ public readonly struct Points : IEquatable<Points>, IComparable<Points>
         => obj is Points points && Equals(points);
     /// <inheritdoc/>
     public override int GetHashCode()
-    {
-        uint hash = amount ^ amount >> 32;
-        return hash.GetHashCode();
-    }
+        => HashCode.Combine(amount, HashCombinator);
     /// <inheritdoc/>
     public override string ToString()
         => HasPoints ? $"{amount} {nameof(Points)}" : $"No {nameof(Points)}";

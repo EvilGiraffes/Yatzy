@@ -45,14 +45,14 @@ public class WrappingContextTests
         output.Write().Expecting(context.Context).ToBeNull();
         context.Context.Should().BeNull();
     }
-    class Faulty : ILogWrappable
+    class Faulty
     {
         public Type WrappedLogType => throw new NotImplementedException();
     }
-    interface IInterface : ILogWrappable
+    interface IInterface
     {
     }
-    abstract class AbstractClass : ILogWrappable
+    abstract class AbstractClass
     {
         public abstract Type WrappedLogType { get; }
     }
