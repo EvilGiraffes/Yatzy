@@ -9,9 +9,9 @@ public sealed class ExecutionHandler<TDice> : IRuleHandler<TDice>
     where TDice : IDice
 {
     /// <inheritdoc/>
-    public bool IsApplicable(IRule<TDice> rule, IReadOnlyList<TDice> hand)
+    public bool IsApplicable(IRule<TDice> rule, IReadOnlyCollection<TDice> hand)
         => rule.IsApplicable(hand);
     /// <inheritdoc/>
-    public Points CalculatePoints(IRule<TDice> rule, IReadOnlyList<TDice> hand)
+    public Points CalculatePoints(IRule<TDice> rule, IReadOnlyCollection<TDice> hand)
         => rule.CalculatePoints(hand);
 }

@@ -27,7 +27,7 @@ public sealed class LoggingHandler<TDice> : IRuleHandler<TDice>
         this.logger = logger.ForType<LoggingHandler<TDice>>();
     }
     /// <inheritdoc/>
-    public bool IsApplicable(IRule<TDice> rule, IReadOnlyList<TDice> hand)
+    public bool IsApplicable(IRule<TDice> rule, IReadOnlyCollection<TDice> hand)
     {
         bool isApplicable = wrapped.IsApplicable(rule, hand);
         string applicability = RenderApplicability(isApplicable);
@@ -35,7 +35,7 @@ public sealed class LoggingHandler<TDice> : IRuleHandler<TDice>
         return isApplicable;
     }
     /// <inheritdoc/>
-    public Points CalculatePoints(IRule<TDice> rule, IReadOnlyList<TDice> hand)
+    public Points CalculatePoints(IRule<TDice> rule, IReadOnlyCollection<TDice> hand)
     {
         Points points = wrapped.CalculatePoints(rule, hand);
         logger.Debug("{Rule} yielded {Points} with the given {Hand}.", rule.Name, points, hand);

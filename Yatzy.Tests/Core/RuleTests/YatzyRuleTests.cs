@@ -26,7 +26,7 @@ public class YatzyRuleTests
     {
         const int amount = 5;
         const int face = 5;
-        IReadOnlyList<IDice> hand = diceMock.BuildHand(amount);
+        IReadOnlyCollection<IDice> hand = diceMock.BuildHand(amount);
         diceMock.Setup(dice => dice.Face).Returns(face);
         Points expected = fixedPoints * amount;
         Points actual = systemUnderTest.CalculatePoints(hand);
@@ -39,7 +39,7 @@ public class YatzyRuleTests
         const int amount = 5;
         int count = 0;
         int face = 0;
-        IReadOnlyList<IDice> hand = diceMock.BuildHand(amount);
+        IReadOnlyCollection<IDice> hand = diceMock.BuildHand(amount);
         diceMock
             .Setup(dice => dice.Face)
             .Returns(() =>

@@ -11,14 +11,10 @@ namespace Yatzy.Rules;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Required methods to set parameters: <br/>
+/// Required methods build <see cref="XOfAKind{TDice}"/>: <br/>
 /// <see cref="X"/> <br/>
-/// <see cref="XTransform(StringTransform{int})"/> <br/>
 /// <see cref="PointsCalculator(IPointsCalculator)"/> <br/>
 /// <see cref="CounterFactory(CounterFactory{int})"/>
-/// </para>
-/// <para>
-/// After you have set everything you will need to call <see cref="BuilderTemplate{TBuilding}.Build"/>.
 /// </para>
 /// </remarks>
 /// <typeparam name="TDice"><inheritdoc cref="XOfAKind{TDice}" path="/typeparam"/></typeparam>

@@ -44,10 +44,10 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
         this.counterFactory = counterFactory;
     }
     /// <inheritdoc/>
-    public bool IsApplicable(IReadOnlyList<TDice> hand)
+    public bool IsApplicable(IReadOnlyCollection<TDice> hand)
         => hand.Count > 1;
     /// <inheritdoc/>
-    public Points CalculatePoints(IReadOnlyList<TDice> hand)
+    public Points CalculatePoints(IReadOnlyCollection<TDice> hand)
     {
         ICounter<int> counter = counterFactory();
         counter.Count(hand.Select(dice => dice.Face));

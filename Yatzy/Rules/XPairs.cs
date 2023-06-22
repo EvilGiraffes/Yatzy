@@ -40,10 +40,10 @@ public sealed class XPairs<TDice> : IRule<TDice>
         Name = $"{xTransform(x)}Pairs";
     }
     /// <inheritdoc/>
-    public bool IsApplicable(IReadOnlyList<TDice> hand)
+    public bool IsApplicable(IReadOnlyCollection<TDice> hand)
         => hand.Count >= x * 2;
     /// <inheritdoc/>
-    public Points CalculatePoints(IReadOnlyList<TDice> hand)
+    public Points CalculatePoints(IReadOnlyCollection<TDice> hand)
     {
         Points sum = Points.Empty;
         ICounter<int> counter = counterFactory();

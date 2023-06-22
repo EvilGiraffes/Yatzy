@@ -22,7 +22,7 @@ public class SameValueRuleTests
     [Fact]
     public void CalculatePoints_NoItemsInHand_NoPoints()
     {
-        IReadOnlyList<IDice> hand = RuleHelper.EmptyHand;
+        IReadOnlyCollection<IDice> hand = RuleHelper.EmptyHand;
         SameValueRule<IDice> rule = BuildRule(1, 1);
         Points actual = rule.CalculatePoints(hand);
         output.Write().Expecting(actual).ToBeEmpty();
@@ -35,7 +35,7 @@ public class SameValueRuleTests
         int face = 1;
         int diceValue = face;
         Points expected = pointsPerValue;
-        IReadOnlyList<IDice> hand = diceMock.BuildHand(5);
+        IReadOnlyCollection<IDice> hand = diceMock.BuildHand(5);
         SameValueRule<IDice> rule = BuildRule(face, pointsPerValue);
         diceMock
             .Setup(dice => dice.Face)
@@ -51,7 +51,7 @@ public class SameValueRuleTests
         int face = 1;
         int amount = 5;
         Points expected = pointsPerValue * amount;
-        IReadOnlyList<IDice> hand = diceMock.BuildHand(amount);
+        IReadOnlyCollection<IDice> hand = diceMock.BuildHand(amount);
         SameValueRule<IDice> rule = BuildRule(face, pointsPerValue);
         diceMock
             .Setup(dice => dice.Face)
@@ -65,7 +65,7 @@ public class SameValueRuleTests
     {
         int pointsPerValue = 10;
         int face = 1;
-        IReadOnlyList<IDice> hand = diceMock.BuildHand(5);
+        IReadOnlyCollection<IDice> hand = diceMock.BuildHand(5);
         SameValueRule<IDice> rule = BuildRule(face, pointsPerValue);
         diceMock
             .Setup(dice => dice.Face)

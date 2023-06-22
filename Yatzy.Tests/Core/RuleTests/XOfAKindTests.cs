@@ -7,8 +7,6 @@ using Yatzy.Rules.PointsCalculators;
 using Yatzy.Tests.Core.FluentAssertionExt;
 using Yatzy.Tests.Core.RuleTests.Helpers;
 
-using static Yatzy.Tests.Core.RuleTests.Helpers.RuleHelper;
-
 namespace Yatzy.Tests.Core.RuleTests;
 public class XOfAKindTests
 {
@@ -51,7 +49,7 @@ public class XOfAKindTests
         counterMock
             .Setup(counter => counter.GetEnumerator())
             .Returns(Enumerable.Empty<Count<int>>().GetEnumerator());
-        Points actual = rule.CalculatePoints(AnyHand);
+        Points actual = rule.CalculatePoints(RuleHelper.AnyHand);
         output.Write().Expecting(actual).ToBeEmpty();
         actual.Should().BeEmpty();
     }
@@ -66,7 +64,7 @@ public class XOfAKindTests
             new(3, 2)
         };
         hand.SetAsEnumeratorFor(counterMock);
-        Points actual = rule.CalculatePoints(AnyHand);
+        Points actual = rule.CalculatePoints(RuleHelper.AnyHand);
         output.Write().Expecting(actual).ToBeEmpty();
         actual.Should().BeEmpty();
     }
@@ -85,7 +83,7 @@ public class XOfAKindTests
         };
         hand.SetAsEnumeratorFor(counterMock);
         pointsCalculatorMock.CalculationReturnsFace();
-        Points actual = rule.CalculatePoints(AnyHand);
+        Points actual = rule.CalculatePoints(RuleHelper.AnyHand);
         output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }

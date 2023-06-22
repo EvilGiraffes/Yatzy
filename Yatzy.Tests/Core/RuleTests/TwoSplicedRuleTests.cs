@@ -39,7 +39,7 @@ public class TwoSplicedRuleTests
         };
         counts.SetAsEnumeratorFor(counterMock);
         spliceMock.SpliceReturns(bounds);
-        Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
+        Points actual = systemUnderTest.CalculatePoints(RuleHelper.AnyHand);
         output.Write().Expecting(actual).ToBeEmpty();
         actual.Should().BeEmpty();
     }
@@ -58,7 +58,7 @@ public class TwoSplicedRuleTests
         pointsCalculatorMock.CalculationReturnsFace();
         spliceMock.SpliceReturns(bounds);
         Points expected = CalculateExpected(maxPoint, minPoint, bounds);
-        Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
+        Points actual = systemUnderTest.CalculatePoints(RuleHelper.AnyHand);
         output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
@@ -78,7 +78,7 @@ public class TwoSplicedRuleTests
         pointsCalculatorMock.CalculationReturnsFace();
         spliceMock.SpliceReturns(bounds);
         Points expected = CalculateExpected(maxPoint, minPoint, bounds);
-        Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
+        Points actual = systemUnderTest.CalculatePoints(RuleHelper.AnyHand);
         output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
@@ -93,7 +93,7 @@ public class TwoSplicedRuleTests
         };
         counts.SetAsEnumeratorFor(counterMock);
         spliceMock.SpliceReturns(bounds);
-        Points actual = systemUnderTest.CalculatePoints(diceMock.BuildHand());
+        Points actual = systemUnderTest.CalculatePoints(RuleHelper.AnyHand);
         output.Write().Expecting(actual).ToBeEmpty();
         actual.Should().BeEmpty();
     }

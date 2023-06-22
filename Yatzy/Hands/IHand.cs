@@ -6,7 +6,7 @@ namespace Yatzy.Hands;
 /// Defines the current hand.
 /// </summary>
 /// <typeparam name="TDice">The dice in which this hand can hold.</typeparam>
-public interface IHand<TDice> : IReadOnlyList<TDice>
+public interface IHand<TDice> : IReadOnlyCollection<TDice>
     where TDice : IDice
 {
     /// <summary>

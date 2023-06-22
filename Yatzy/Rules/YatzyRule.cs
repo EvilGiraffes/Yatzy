@@ -42,26 +42,41 @@ public sealed class YatzyRule<TDice> : IRule<TDice>
         this.pointsCalculator = pointsCalculator;
     }
     /// <inheritdoc/>
-    public bool IsApplicable(IReadOnlyList<TDice> hand)
+    public bool IsApplicable(IReadOnlyCollection<TDice> hand)
         => !hand.IsEmpty();
     /// <inheritdoc/>
-    public Points CalculatePoints(IReadOnlyList<TDice> hand)
+    public Points CalculatePoints(IReadOnlyCollection<TDice> hand)
     {
         Points sum = Points.Empty;
-        int face = hand[0].Face;
-        foreach (IDice dice in hand)
+        YatzyFace yatzy = YatzyFace.None;
+        foreach (int face in hand.Select(dice => dice.Face))
         {
-            if (dice.Face != face)
+            yatzy = yatzy.TrackFace(face);
+            if (face != yatzy.Face)
             {
-                logger.Verbose(
+                logger.Debug(
                     "The current face {Face} was inequal to the rest of the faces, therefore is not yatzy. Expected face {ExpectedFace}",
-                    dice.Face, face);
+                    face, yatzy.Face);
                 return Points.Empty;
             }
-            sum += pointsCalculator.Calculate(face);
+            sum += pointsCalculator.Calculate(yatzy.Face);
             logger.Verbose("Current sum is {Sum}", sum);
         }
         return sum;
     }
-
+    readonly struct YatzyFace
+    {
+        public int Face { get; }
+        public static YatzyFace None { get; } = new(0, true);
+        readonly bool none;
+        YatzyFace(int face, bool none)
+        {
+            Face = face;
+            this.none = none;
+        }
+        public YatzyFace TrackFace(int face)
+            => none
+            ? new YatzyFace(face, false)
+            : this;
+    }
 }
