@@ -13,8 +13,7 @@ namespace Yatzy.Rules;
 /// <para>
 /// Required methods to build <see cref="XPairs{TDice}"/>: <br/>
 /// <see cref="X(int)"/> <br/>
-/// <see cref="PointsCalculator(IPointsCalculator)"/> <br/>
-/// <see cref="CounterFactory(CounterFactory{int})"/>
+/// <see cref="PointsCalculator(IPointsCalculator)"/>
 /// </para>
 /// </remarks>
 /// <typeparam name="TDice"><inheritdoc cref="BuilderTemplate{TBuilding}" path="/typeparam"/></typeparam>
@@ -25,12 +24,9 @@ public sealed class XPairsBuilder<TDice> : BuilderTemplate<XPairs<TDice>>
     int? x = default;
     StringTransform<int>? xTransform = default;
     IPointsCalculator pointsCalculator = default!;
-    CounterFactory<int> counterFactory = default!;
-    /// <summary>
-    /// Constructs a new <see cref="XPairsBuilder{TDice}"/>.
-    /// </summary>
-    /// <param name="logger">The logger used throughout this application.</param>
-    public XPairsBuilder(ILogger logger) : base(logger.ForType<XPairsBuilder<TDice>>())
+    CounterFactory<int>? counterFactory = default;
+    Func<ISet<int>>? setFactory = default;
+    internal XPairsBuilder(ILogger logger) : base(logger.ForType<XPairsBuilder<TDice>>())
     {
         this.logger = logger;
     }
@@ -74,17 +70,28 @@ public sealed class XPairsBuilder<TDice> : BuilderTemplate<XPairs<TDice>>
         this.counterFactory = counterFactory;
         return this;
     }
+    /// <summary>
+    /// Sets the set factory for the instance being created.
+    /// </summary>
+    /// <param name="setFactory">The set factory to use.</param>
+    /// <returns><inheritdoc cref="X(int)" path="/returns"/></returns>
+    public XPairsBuilder<TDice> SetFactory(Func<ISet<int>> setFactory)
+    {
+        this.setFactory = setFactory;
+        return this;
+    }
     /// <inheritdoc/>
     protected override IEnumerable<Member> RequiredMemberObjects()
     {
         yield return new(x);
         yield return new(pointsCalculator);
-        yield return new(counterFactory);
     }
     /// <inheritdoc/>
     protected override XPairs<TDice> Create()
     {
         xTransform ??= x => x.ToString();
-        return new(logger, (int) x!, xTransform, pointsCalculator, counterFactory);
+        counterFactory ??= () => new HashCounter<int>(logger);
+        setFactory ??= () => new HashSet<int>();
+        return new(logger, (int) x!, xTransform, pointsCalculator, counterFactory, setFactory);
     }
 }

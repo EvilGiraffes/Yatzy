@@ -27,14 +27,22 @@ public abstract class BuilderTemplate<TBuilding> : IBuilder<TBuilding>
         IEnumerable<Member> requiredMembers = RequiredMemberObjects();
         if (AnyNull(requiredMembers))
         {
-            IEnumerable<string> nullParams = IdentifyNullValues(requiredMembers);
+            IEnumerable<string> nullParams = NullValuesName(requiredMembers);
             logger.Error("The build has failed. The following parameters has not been overwritten: {NullParams}", nullParams);
             throw new BuildingContainedNullParameters
             {
                 Parameters = nullParams
             };
         }
-        return Create();
+        try
+        {
+            return Create();
+        }
+        catch (Exception exception)
+        {
+            logger.Error(exception, "The build has failed during creation of the object.");
+            throw new BuildingFailed("Unexpected creation failure.", exception);
+        }
     }
     /// <summary>
     /// The members required to not be null.
@@ -45,18 +53,14 @@ public abstract class BuilderTemplate<TBuilding> : IBuilder<TBuilding>
     /// Creates the final product after all checks are complete.
     /// </summary>
     /// <returns>A new instance of <typeparamref name="TBuilding"/>.</returns>
+    /// <exception cref="Exception">Thrown during any construction failure.</exception>
     protected abstract TBuilding Create();
     static bool AnyNull(IEnumerable<Member> requiredMembers)
         => requiredMembers.Any(member => member.IsNull);
-    static IEnumerable<string> IdentifyNullValues(IEnumerable<Member> requiredMembers)
-    {
-        foreach (Member member in requiredMembers)
-        {
-            if (member.IsNotNull)
-                continue;
-            yield return member.Name;
-        }
-    }
+    static IEnumerable<string> NullValuesName(IEnumerable<Member> requiredMembers)
+        => requiredMembers
+        .Where(member => member.IsNull)
+        .Select(member => member.Name);
     /// <summary>
     /// Represents a member of the class.
     /// </summary>

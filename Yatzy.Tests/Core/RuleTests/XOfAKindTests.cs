@@ -11,21 +11,15 @@ namespace Yatzy.Tests.Core.RuleTests;
 public class XOfAKindTests
 {
     readonly ITestOutputHelper output;
-    readonly ILogger logger;
     readonly Mock<IPointsCalculator> pointsCalculatorMock;
     readonly Mock<ICounter<int>> counterMock;
-    readonly Mock<IDice> diceMock;
-    readonly CounterFactory<int> counterFactory;
     const int MinimumCount = XOfAKind<IDice>.Minimum;
     const int MaximumCount = XOfAKind<IDice>.Maximum;
     public XOfAKindTests(ITestOutputHelper output)
     {
         this.output = output;
-        logger = LoggerHelper.GetTestOutputLogger<XOfAKindTests>(output);
         pointsCalculatorMock = new();
         counterMock = new();
-        diceMock = new();
-        counterFactory = () => counterMock.Object;
     }
     [Theory]
     [InlineData(MinimumCount)]
@@ -87,10 +81,11 @@ public class XOfAKindTests
         output.Write().Expecting(actual).ToBe(expected);
         actual.Should().Be(expected);
     }
-    string SimpleTransform(int x)
-        => x.ToString();
-    XOfAKind<IDice> CreateRule(StringTransform<int> transform, int x = MinimumCount)
-        => new(logger, x, transform, pointsCalculatorMock.Object, counterFactory);
     XOfAKind<IDice> CreateRule(int x = MinimumCount)
-        => CreateRule(SimpleTransform, x);
+    {
+        ILogger logger = LoggerHelper.GetTestOutputLogger<XOfAKindTests>(output);
+        StringTransform<int> transform = TransformHelper.SimpleTransform;
+        CounterFactory<int> counterFactor = () => counterMock.Object;
+        return new(logger, x, transform, pointsCalculatorMock.Object, counterFactor);
+    }
 }

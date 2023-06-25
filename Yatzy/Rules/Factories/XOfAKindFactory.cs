@@ -12,21 +12,11 @@ namespace Yatzy.Rules.Factories;
 public sealed class XOfAKindFactory<TDice> : IRuleFactory<TDice>
     where TDice : IDice
 {
-    /// <summary>
-    /// Represents a method to partially create <see cref="XOfAKindFactory{TDice}"/>.
-    /// </summary>
-    /// <param name="x">
-    /// <inheritdoc 
-    /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
-    /// path="/param[@name='x']"/>
-    /// </param>
-    /// <returns>A new <see cref="XOfAKindFactory{TDice}"/>.</returns>
-    public delegate XOfAKindFactory<TDice> PartialFactory(int x);
     readonly int x;
     readonly IPointsCalculator pointsCalculator;
-    readonly StringTransform<int> xTransform;
-    readonly CounterFactory<int> counterFactory;
-    XOfAKindFactory(int x, IPointsCalculator pointsCalculator, StringTransform<int> xTransform, CounterFactory<int> counterFactory)
+    readonly StringTransform<int>? xTransform;
+    readonly CounterFactory<int>? counterFactory;
+    XOfAKindFactory(int x, IPointsCalculator pointsCalculator, StringTransform<int>? xTransform, CounterFactory<int>? counterFactory)
     {
         this.x = x;
         this.pointsCalculator = pointsCalculator;
@@ -35,12 +25,17 @@ public sealed class XOfAKindFactory<TDice> : IRuleFactory<TDice>
     }
     /// <inheritdoc/>
     public IRule<TDice> Create(ILogger logger)
-        => XOfAKind<TDice>.Builder(logger)
-        .X(x)
-        .XTransform(xTransform)
-        .PointsCalculator(pointsCalculator)
-        .CounterFactory(counterFactory)
-        .Build();
+    {
+        XOfAKindBuilder<TDice> builder = XOfAKind<TDice>.Builder(logger);
+        builder
+            .X(x)
+            .PointsCalculator(pointsCalculator);
+        if (xTransform is not null)
+            builder.XTransform(xTransform);
+        if (counterFactory is not null)
+            builder.CounterFactory(counterFactory);
+        return builder.Build();
+    }
     /// <summary>
     /// Creates a partial implementation of <see cref="XOfAKindFactory{TDice}"/>.
     /// </summary>
@@ -59,7 +54,7 @@ public sealed class XOfAKindFactory<TDice> : IRuleFactory<TDice>
     /// cref="XOfAKind{TDice}.XOfAKind(ILogger, int, StringTransform{int}, IPointsCalculator, CounterFactory{int})"
     /// path="/param[@name='counterFactory']"/>
     /// </param>
-    /// <returns>A new <see cref="PartialFactory"/>.</returns>
-    public static PartialFactory Partial(IPointsCalculator pointsCalculator, StringTransform<int> xTransform, CounterFactory<int> counterFactory)
+    /// <returns>A new partial implementation of <see cref="XOfAKindFactory{TDice}"/>.</returns>
+    public static Func<int, XOfAKindFactory<TDice>> Partial(IPointsCalculator pointsCalculator, StringTransform<int>? xTransform = null, CounterFactory<int>? counterFactory = null)
         => x => new(x, pointsCalculator, xTransform, counterFactory);
 }

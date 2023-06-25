@@ -13,24 +13,19 @@ namespace Yatzy.Rules;
 /// <para>
 /// Required methods build <see cref="XOfAKind{TDice}"/>: <br/>
 /// <see cref="X"/> <br/>
-/// <see cref="PointsCalculator(IPointsCalculator)"/> <br/>
-/// <see cref="CounterFactory(CounterFactory{int})"/>
+/// <see cref="PointsCalculator(IPointsCalculator)"/>
 /// </para>
 /// </remarks>
 /// <typeparam name="TDice"><inheritdoc cref="XOfAKind{TDice}" path="/typeparam"/></typeparam>
 public sealed class XOfAKindBuilder<TDice> : BuilderTemplate<XOfAKind<TDice>>
     where TDice : IDice
 {
+    readonly ILogger logger;
     int? x = default;
     StringTransform<int>? xTransform = default;
     IPointsCalculator pointsCalculator = default!;
-    CounterFactory<int> counterFactory = default!;
-    readonly ILogger logger;
-    /// <summary>
-    /// Constructs a new <see cref="XOfAKindBuilder{TDice}"/> for <see cref="XOfAKind{TDice}"/>.
-    /// </summary>
-    /// <param name="logger">The logger used throughout this application.</param>
-    public XOfAKindBuilder(ILogger logger)
+    CounterFactory<int>? counterFactory = default;
+    internal XOfAKindBuilder(ILogger logger)
         : base(logger.ForType<XOfAKindBuilder<TDice>>())
     {
         this.logger = logger;
@@ -96,12 +91,12 @@ public sealed class XOfAKindBuilder<TDice> : BuilderTemplate<XOfAKind<TDice>>
     {
         yield return new(x);
         yield return new(pointsCalculator);
-        yield return new(counterFactory);
     }
     /// <inheritdoc/>
     protected override XOfAKind<TDice> Create()
     {
         xTransform ??= x => x.ToString();
+        counterFactory ??= () => new HashCounter<int>(logger);
         return new(logger, (int) x!, xTransform, pointsCalculator, counterFactory);
     }
 }

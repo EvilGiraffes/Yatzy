@@ -44,7 +44,6 @@ public sealed class XOfAKindBuilderTests
             _ = systemUnderTest
             .X(MinimumX)
             .PointsCalculator(pointsCalculatorMock.Object)
-            .CounterFactory(counterFactory)
             .Build();
         };
         act.Should().NotThrow();
@@ -66,7 +65,6 @@ public sealed class XOfAKindBuilderTests
         {
             _ = systemUnderTest
             .PointsCalculator(pointsCalculatorMock.Object)
-            .CounterFactory(counterFactory)
             .Build();
         };
         act.Should().Throw<BuildingFailed>();
@@ -78,19 +76,6 @@ public sealed class XOfAKindBuilderTests
         {
             _ = systemUnderTest
             .X(MinimumX)
-            .CounterFactory(counterFactory)
-            .Build();
-        };
-        act.Should().Throw<BuildingFailed>();
-    }
-    [Fact]
-    public void Build_CounterFactoryNotSet_Exception()
-    {
-        Action act = () =>
-        {
-            _ = systemUnderTest
-            .X(MinimumX)
-            .PointsCalculator(pointsCalculatorMock.Object)
             .Build();
         };
         act.Should().Throw<BuildingFailed>();

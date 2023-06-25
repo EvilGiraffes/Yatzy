@@ -47,36 +47,24 @@ public sealed class YatzyRule<TDice> : IRule<TDice>
     /// <inheritdoc/>
     public Points CalculatePoints(IReadOnlyCollection<TDice> hand)
     {
+        using IEnumerator<int> faceEnumerator = hand.Select(dice => dice.Face).GetEnumerator();
+        faceEnumerator.MoveNext();
         Points sum = Points.Empty;
-        YatzyFace yatzy = YatzyFace.None;
-        foreach (int face in hand.Select(dice => dice.Face))
+        int yatzyFace = faceEnumerator.Current;
+        do
         {
-            yatzy = yatzy.TrackFace(face);
-            if (face != yatzy.Face)
+            int face = faceEnumerator.Current;
+            if (face != yatzyFace)
             {
                 logger.Debug(
                     "The current face {Face} was inequal to the rest of the faces, therefore is not yatzy. Expected face {ExpectedFace}",
-                    face, yatzy.Face);
+                    face, yatzyFace);
                 return Points.Empty;
             }
-            sum += pointsCalculator.Calculate(yatzy.Face);
+            sum += pointsCalculator.Calculate(face);
             logger.Verbose("Current sum is {Sum}", sum);
         }
+        while (faceEnumerator.MoveNext());
         return sum;
-    }
-    readonly struct YatzyFace
-    {
-        public int Face { get; }
-        public static YatzyFace None { get; } = new(0, true);
-        readonly bool none;
-        YatzyFace(int face, bool none)
-        {
-            Face = face;
-            this.none = none;
-        }
-        public YatzyFace TrackFace(int face)
-            => none
-            ? new YatzyFace(face, false)
-            : this;
     }
 }

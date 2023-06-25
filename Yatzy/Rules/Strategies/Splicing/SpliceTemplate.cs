@@ -26,9 +26,8 @@ public abstract class SpliceTemplate : ISpliceStrategy
     {
         if (count < MinimumCount)
         {
-            InvalidSpliceOperation exception = new($"Count cannot be under {MinimumCount}.");
-            Logger.Error(exception, "The count {Count} was too low.", count);
-            throw exception;
+            Logger.Error("The count {Count} was too low.", count);
+            throw new InvalidSpliceOperation($"Count cannot be under {MinimumCount}.");
         }
         SpliceContext splice = DivideCount(count);
         Logger.Debug("Spliced it at {Splice}.", splice);

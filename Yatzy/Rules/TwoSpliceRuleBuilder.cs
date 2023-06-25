@@ -16,11 +16,7 @@ namespace Yatzy.Rules;
 /// Required methods to set parameters: <br/>
 /// <see cref="Identifier(string)"/> <br/>
 /// <see cref="SpliceStrategy(ISpliceStrategy)"/> <br/>
-/// <see cref="PointsCalculator(IPointsCalculator)"/> <br/>
-/// <see cref="CounterFactory(CounterFactory{int})"/>
-/// </para>
-/// <para>
-/// After you have set everything you will need to call <see cref="BuilderTemplate{TBuilding}.Build"/>.
+/// <see cref="PointsCalculator(IPointsCalculator)"/>
 /// </para>
 /// </remarks>
 public sealed class TwoSplicedRuleBuilder<TDice> : BuilderTemplate<TwoSplicedRule<TDice>>
@@ -29,7 +25,7 @@ public sealed class TwoSplicedRuleBuilder<TDice> : BuilderTemplate<TwoSplicedRul
     string identifier = default!;
     ISpliceStrategy splicer = default!;
     IPointsCalculator pointsCalculator = default!;
-    CounterFactory<int> counterFactory = default!;
+    CounterFactory<int>? counterFactory = default;
     readonly ILogger logger;
     /// <summary>
     /// Constructs a new <see cref="TwoSplicedRuleBuilder{TDice}"/>.
@@ -105,9 +101,11 @@ public sealed class TwoSplicedRuleBuilder<TDice> : BuilderTemplate<TwoSplicedRul
         yield return new(identifier);
         yield return new(splicer);
         yield return new(pointsCalculator);
-        yield return new(counterFactory);
     }
     /// <inheritdoc/>
     protected override TwoSplicedRule<TDice> Create()
-        => new(logger, identifier, splicer, pointsCalculator, counterFactory);
+    {
+        counterFactory ??= () => new HashCounter<int>(logger);
+        return new(logger, identifier, splicer, pointsCalculator, counterFactory);
+    }
 }

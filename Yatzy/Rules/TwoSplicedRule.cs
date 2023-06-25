@@ -4,7 +4,6 @@ using Serilog;
 
 using Yatzy.Counting.Counters;
 using Yatzy.Dices;
-using Yatzy.Extentions;
 using Yatzy.Logging;
 using Yatzy.Rules.PointsCalculators;
 using Yatzy.Rules.Strategies.Splicing;
@@ -26,7 +25,6 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
     readonly ISpliceStrategy splicer;
     readonly IPointsCalculator pointsCalculator;
     readonly CounterFactory<int> counterFactory;
-    readonly record struct Faces(int Max, int Min);
     /// <summary>
     /// Constructs a new instance of <see cref="TwoSplicedRule{TDice}"/>.
     /// </summary>
@@ -86,18 +84,19 @@ public sealed class TwoSplicedRule<TDice> : IRule<TDice>
             logger.Verbose("Higher bound has changed. Currently {MaxHigherBound}", maxHigherBound);
         }
         StringBuilder builder = new();
-        builder
-            .Append("Calculated the max and min face from {Counter}. ")
-            .Append("From the bound found the maximum face for the {MaxBound} count to be {MaxCount}, ")
-            .Append("and from the minimum face for the {MinBound} count to be {MinCount}.")
-            .InsertResult(
-            template => logger.Debug(template, counter, bounds.High, maxHigherBound, bounds.Low, maxLowerBound));
+        string template = "Found the {Type} bounds highest value face to be {Face} with a count above {Bound}";
+        logger.Debug(template, "maximum", maxHigherBound, bounds.High);
+        logger.Debug(template, "minimum", maxLowerBound, bounds.Low);
         return new(maxHigherBound, maxLowerBound);
     }
     Points HandlePoints(Faces faces, Bounds bounds)
     {
         if (faces.Max < 1 || faces.Min < 1)
+        {
+            logger.Debug("The faces {Faces} never got a large enough count to be above the bound {Bound}", faces, bounds);
             return Points.Empty;
+        }
         return pointsCalculator.Calculate(faces.Max) * bounds.High + pointsCalculator.Calculate(faces.Min) * bounds.Low;
     }
+    readonly record struct Faces(int Max, int Min);
 }

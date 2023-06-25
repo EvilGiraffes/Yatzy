@@ -8,7 +8,7 @@ using Yatzy.Rules.PointsCalculators;
 
 namespace Yatzy.Rules;
 /// <summary>
-/// Represents a class which checks an X amount of pairs.
+/// Represents an <see cref="IRule{TDice}"/> which checks an X amount of pairs.
 /// </summary>
 /// <typeparam name="TDice"><inheritdoc cref="IRule{TDice}" path="/typeparam"/></typeparam>
 public sealed class XPairs<TDice> : IRule<TDice>
@@ -20,6 +20,7 @@ public sealed class XPairs<TDice> : IRule<TDice>
     readonly int x;
     readonly IPointsCalculator pointsCalculator;
     readonly CounterFactory<int> counterFactory;
+    readonly Func<ISet<int>> setFactory;
     internal const int Minimum = 1;
     internal const int Maximum = int.MaxValue;
     /// <summary>
@@ -30,13 +31,16 @@ public sealed class XPairs<TDice> : IRule<TDice>
     /// <param name="xTransform">The transformation for <paramref name="x"/> to name the instance with <see cref="XPairs{TDice}.Name"/>.</param>
     /// <param name="pointsCalculator">The strategy to calculate points based on.</param>
     /// <param name="counterFactory">The factory to create a counter.</param>
-    internal XPairs(ILogger logger, int x, StringTransform<int> xTransform, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory)
+    /// <param name="setFactory">The factory to create an <see cref="ISet{T}"/>.</param>
+    /// <exception cref="XOutOfRange">Thrown when <paramref name="x"/> is out of range.</exception>
+    internal XPairs(ILogger logger, int x, StringTransform<int> xTransform, IPointsCalculator pointsCalculator, CounterFactory<int> counterFactory, Func<ISet<int>> setFactory)
     {
         this.logger = logger.ForType<XPairs<TDice>>();
-        XOutOfRange.Guard(logger, x, Minimum, Maximum);
+        XOutOfRange.Guard(this.logger, x, Minimum, Maximum);
         this.x = x;
         this.pointsCalculator = pointsCalculator;
         this.counterFactory = counterFactory;
+        this.setFactory = setFactory;
         Name = $"{xTransform(x)}Pairs";
     }
     /// <inheritdoc/>
@@ -47,7 +51,7 @@ public sealed class XPairs<TDice> : IRule<TDice>
     {
         Points sum = Points.Empty;
         ICounter<int> counter = counterFactory();
-        HashSet<int> calculated = new();
+        ISet<int> calculated = setFactory();
         foreach (int face in hand.Select(dice => dice.Face))
         {
             counter.Count(face);
@@ -58,7 +62,8 @@ public sealed class XPairs<TDice> : IRule<TDice>
             }
             if (calculated.Contains(face))
             {
-                logger.Verbose("Count of {Face} has already been calculated.", face);
+                logger.Verbose("{Face} has already been calculated.", face);
+                continue;
             }
             Points given = pointsCalculator.Calculate(face) * 2;
             sum += given;
@@ -68,4 +73,11 @@ public sealed class XPairs<TDice> : IRule<TDice>
         }
         return sum;
     }
+    /// <summary>
+    /// Creates a new <see cref="XPairsBuilder{TDice}"/> to construct an instance of <see cref="XPairs{TDice}"/>.
+    /// </summary>
+    /// <param name="logger">the logger used throughout this application.</param>
+    /// <returns>A new <see cref="XPairsBuilder{TDice}"/>.</returns>
+    public static XPairsBuilder<TDice> Builder(ILogger logger)
+        => new(logger);
 }
